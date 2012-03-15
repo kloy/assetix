@@ -23,26 +23,32 @@ define('ASSET_PATH', BASEPATH.'/assets');
 class Assetix
 {
 	// Assetic AssetManager
-	protected $am = null;
+	protected $_am = null;
 	// Assetic FilterManager
-	protected $fm = null;
-	protected $assets = array();
+	protected $_fm = null;
+	protected $_assets = array();
+	protected $_config = array();
 
-	function __construct()
+	function __construct($config = array())
 	{
-		$this->am = new AssetManager();
-		$this->fm = new FilterManager();
+		if (count($config) === 0)
+		{
+			$config = require(BASEPATH.'/config/assetix.php');
+		}
+		$this->_config = $config;
+		$this->_am = new AssetManager();
+		$this->_fm = new FilterManager();
 		$this->_setup_filters();
 	}
 
 	function get_am()
 	{
-		return $this->am;
+		return $this->_am;
 	}
 
 	function get_fm()
 	{
-		return $this->fm;
+		return $this->_fm;
 	}
 
 	function _to_collection($files)
@@ -96,7 +102,8 @@ class Assetix
 		$factory = new AssetFactory(ASSET_PATH);
 		$factory->setAssetManager($this->get_am());
 		$factory->setFilterManager($this->get_fm());
-		$factory->setDebug(true);
+		$config = $this->get_config();
+		$factory->setDebug($config['debug']);
 
 		return $factory->createAsset($assets, $filters)->dump();
 	}
@@ -105,14 +112,14 @@ class Assetix
 	{
 		if (count(func_num_args()) === 0) throw new \Exception("asset cannot be empty");
 		$args = func_get_args();
-		call_user_func_array(array($this->am, "set"), $args);
+		call_user_func_array(array($this->_am, "set"), $args);
 	}
 
 	function add_filter()
 	{
 		if (count(func_num_args()) === 0) throw new \Exception("filter cannot be empty");
 		$args = func_get_args();
-		call_user_func_array(array($this->fm, "set"), $args);
+		call_user_func_array(array($this->_fm, "set"), $args);
 	}
 
 	protected function _setup_filters()
@@ -120,5 +127,10 @@ class Assetix
 		$this->add_filter('yui_js', new Yui\JsCompressorFilter(BASEPATH.'/bin/yuicompressor-2.4.7.jar'));
 		$this->add_filter('yui_css', new Yui\CssCompressorFilter(BASEPATH.'/bin/yuicompressor-2.4.7.jar'));
 		$this->add_filter('less', new LessFilter());
+	}
+
+	function get_config()
+	{
+		return $this->_config;
 	}
 }
