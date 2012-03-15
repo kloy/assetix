@@ -2,8 +2,11 @@
 
 namespace Assetix;
 
+define('BASEPATH', __DIR__.'/..');
+define('ASSET_PATH', BASEPATH.'/assets');
+
 // Composer autoloader
-require 'vendor/.composer/autoload.php';
+require BASEPATH.'/vendor/.composer/autoload.php';
 
 // Use Assetic namespaces
 use Assetic\Asset\AssetCollection;
@@ -14,11 +17,7 @@ use Assetic\FilterManager;
 use Assetic\Filter\LessFilter;
 use Assetic\Filter\Sass\SassFilter;
 use Assetic\Filter\Yui;
-use Assetic\AssetWriter;
 use Assetic\Factory\AssetFactory;
-
-define('BASEPATH', __DIR__);
-define('ASSET_PATH', BASEPATH.'/assets');
 
 class Assetix
 {
@@ -144,5 +143,10 @@ class Assetix
 	function get_config()
 	{
 		return $this->_config;
+	}
+
+	function write($contents)
+	{
+		$this->_aw->write(BASEPATH.'/production', $contents);
 	}
 }

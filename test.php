@@ -1,6 +1,6 @@
 <?php
 
-require('assetix.php');
+require('classes/assetix.php');
 
 $assetix = new Assetix\Assetix();
 $css = array('/css/test.css');
