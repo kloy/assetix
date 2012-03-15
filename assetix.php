@@ -57,7 +57,8 @@ class Assetix
 
 		foreach($files as $file)
 		{
-			if (strpos($file, '*') !== -1)
+			echo $file."\n";
+			if (strpos($file, '*') === false)
 			{
 				$asset = new FileAsset(ASSET_PATH.$file);
 			}
@@ -92,6 +93,17 @@ class Assetix
 
 		$assets = array('@'.$group);
 		$filters = array('?yui_css');
+
+		return $this->_render($assets, $filters);
+	}
+
+	// Get a js asset
+	function js($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('?yui_js');
 
 		return $this->_render($assets, $filters);
 	}
