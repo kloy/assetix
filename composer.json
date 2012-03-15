@@ -1,0 +1,5 @@
+{
+    "require": {
+        "kriswallsmith/assetic": "1.0.*"
+    }
+}
