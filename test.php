@@ -16,5 +16,5 @@ $js = array('/js/underscore.js', '/js/*');
 $assetix->js('base_js', $js);
 
 // Echo out raw compiled files
-echo $assetix->css('base_css', array(), true)."\n";
-echo $assetix->js('base_js', array(), true)."\n";
+echo $assetix->css('base_css', true)."\n";
+echo $assetix->js('base_js', true)."\n";
