@@ -26,25 +26,17 @@ class UnderscoreFilter implements FilterInterface
 
     public function filterLoad(AssetInterface $asset)
     {
-        $input = tempnam(sys_get_temp_dir(), 'assetic_underscore_tmpl');
-        file_put_contents($input, $asset->getContent());
+        $template_name = $asset->getSourcePath();
+        $template_contents = addslashes(
+            preg_replace("/[\n\r\t ]+/"," ",$asset->getContent())
+        );
+        $content = 'window.JST = window.JST || {};'
+                    . PHP_EOL
+                    . "window.JST['{$template_name}'] = _.template("
+                    . "'{$template_contents}');"
+                    . PHP_EOL;
 
-        $pb = new ProcessBuilder(array(
-            $this->nodePath,
-            $this->underscoreTmplPath,
-            $input,
-        ));
-
-        $proc = $pb->getProcess();
-        $code = $proc->run();
-        unlink($input);
-
-        if (0 < $code) {
-            throw new \RuntimeException($proc->getErrorOutput());
-        }
-
-        $processedContent = "JST['".$asset->getSourcePath()."'] = ".$proc->getOutput().";";
-        $asset->setContent($processedContent);
+        $asset->setContent($content);
     }
 
     public function filterDump(AssetInterface $asset)

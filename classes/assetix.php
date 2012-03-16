@@ -66,7 +66,7 @@ class Assetix
 
 		$compiled = $this->_compiler->{$type}($group, $files);
 
-		return $this->_render($compiled, $raw);
+		return $this->_render($group, $type, $compiled, $raw);
 	}
 
 	// Get a css asset
@@ -105,16 +105,45 @@ class Assetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
-	protected function _render($contents, $raw = false)
+	protected function _render($group, $type, $contents, $raw = false)
 	{
 		if ($raw === true)
 		{
 			return $contents;
 		}
+		else
+		{
+			call_user_func_array(array($this, "write"), func_get_args());
+		}
 	}
 
-	function write($contents)
+	function get_ext($type)
 	{
-		// $this->_aw->write(BASEPATH.'/production', $contents);
+		switch ($type)
+		{
+			case "css":
+				return "css";
+			case "less":
+				return "css";
+			case "js":
+				return "js";
+			case "underscore":
+				return "js";
+			default:
+				throw \Exception("Type $type does not has an extension");
+		}
+	}
+
+	function write($group, $type, $contents)
+	{
+		$path = ASSETIX_ASSET_PATH."/production/{$group}.".$this->get_ext($type);
+
+		if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0777, true)) {
+            throw new \Exception('Unable to create directory '.$dir);
+        }
+
+        if (false === @file_put_contents($path, $contents)) {
+            throw new \RuntimeException('Unable to write file '.$path);
+        }
 	}
 }

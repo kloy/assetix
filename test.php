@@ -6,6 +6,7 @@ use Assetix\Assetix;
 
 // Clear cache for testing purposes
 `rm cache/*`;
+`rm assets/production/*`;
 
 // Instantiate Assetix
 $assetix = new Assetix();
