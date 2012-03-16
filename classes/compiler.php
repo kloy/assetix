@@ -7,6 +7,8 @@ require_once(BASEPATH.'/vendor/.composer/autoload.php');
 
 // Use Assetic namespaces
 use Assetic\Asset\AssetCollection;
+use Assetic\Asset\AssetCache;
+use Assetic\Cache\FilesystemCache;
 use Assetic\AssetManager;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\GlobAsset;
@@ -43,7 +45,7 @@ class Compiler
 		return $this->_fm;
 	}
 
-	function _to_collection($files)
+	protected function _to_collection($files)
 	{
 		$collection = new AssetCollection();
 
@@ -64,6 +66,16 @@ class Compiler
 		return $collection;
 	}
 
+	protected function _to_cache(AssetCollection $collection)
+	{
+		$config = $this->get_config();
+		$system_cache = new FilesystemCache($config['cache_path']);
+
+		$cached = new AssetCache($collection, $system_cache);
+
+		return $cached;
+	}
+
 	// All asset methods use this logic for checking variables and adding assets
 	protected function _asset($group, $files)
 	{
@@ -73,7 +85,8 @@ class Compiler
 		if (count($files) !== 0)
 		{
 			$collection = $this->_to_collection($files);
-			$this->add_asset($group, $collection);
+			$cached = $this->_to_cache($collection);
+			$this->add_asset($group, $cached);
 		}
 	}
 
@@ -127,9 +140,10 @@ class Compiler
 
 	protected function _setup_filters()
 	{
-		$this->add_filter('yui_js', new Yui\JsCompressorFilter(BASEPATH.'/bin/yuicompressor-2.4.7.jar'));
-		$this->add_filter('yui_css', new Yui\CssCompressorFilter(BASEPATH.'/bin/yuicompressor-2.4.7.jar'));
-		$this->add_filter('less', new LessFilter());
+		$config = $this->get_config();
+		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
+		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
+		$this->add_filter('less', new LessFilter($config['node_path']));
 	}
 
 	function get_config()
