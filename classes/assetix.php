@@ -78,6 +78,15 @@ class Assetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
+	// Get a less asset
+	function less()
+	{
+		$args = func_get_args();
+		$args[] = 'less';
+
+		return call_user_func_array(array($this, "_asset"), $args);
+	}
+
 	// Get a js asset
 	function js()
 	{
@@ -87,11 +96,11 @@ class Assetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
-	// Get a js asset
-	function less()
+	// Get a underscore asset
+	function underscore()
 	{
 		$args = func_get_args();
-		$args[] = 'less';
+		$args[] = 'underscore';
 
 		return call_user_func_array(array($this, "_asset"), $args);
 	}

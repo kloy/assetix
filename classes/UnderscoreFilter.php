@@ -2,6 +2,9 @@
 
 namespace Assetix\Filter;
 
+require_once(ASSETIX_PATH.'/vendor/.composer/autoload.php');
+
+use Assetic\Filter\FilterInterface;
 use Assetic\Asset\AssetInterface;
 use Assetic\Util\ProcessBuilder;
 
@@ -12,69 +15,24 @@ use Assetic\Util\ProcessBuilder;
  */
 class UnderscoreFilter implements FilterInterface
 {
-    private $nodeBin;
-    private $nodePaths;
+    private $underscoreTmplPath;
+    private $nodePath;
 
-    /**
-     * Constructor.
-     *
-     * @param string $nodeBin   The path to the node binary
-     * @param array  $nodePaths An array of node paths
-     */
-    public function __construct($nodeBin = '/usr/bin/node', array $nodePaths = array())
+    public function __construct($underscoreTmplPath = "", $nodePath = '/usr/bin/node')
     {
-        $this->nodeBin = $nodeBin;
-        $this->nodePaths = $nodePaths;
+        $this->underscoreTmplPath = ASSETIX_PATH.'/bin/_tmpl';
+        $this->nodePath = $nodePath;
     }
 
     public function filterLoad(AssetInterface $asset)
     {
-        static $format = <<<'EOF'
-var less = require('less');
-var sys  = require(process.binding('natives').util ? 'util' : 'sys');
+        $input = tempnam(sys_get_temp_dir(), 'assetic_underscore_tmpl');
+        file_put_contents($input, $asset->getContent());
 
-new(less.Parser)(%s).parse(%s, function(e, tree) {
-    if (e) {
-        less.writeError(e);
-        process.exit(2);
-    }
-
-    try {
-        sys.print(tree.toCSS(%s));
-    } catch (e) {
-        less.writeError(e);
-        process.exit(3);
-    }
-});
-
-EOF;
-
-        $root = $asset->getSourceRoot();
-        $path = $asset->getSourcePath();
-
-        // parser options
-        $parserOptions = array();
-        if ($root && $path) {
-            $parserOptions['paths'] = array(dirname($root.'/'.$path));
-            $parserOptions['filename'] = basename($path);
-        }
-
-        // tree options
-        $treeOptions = array();
-
-        $pb = new ProcessBuilder();
-        $pb->inheritEnvironmentVariables();
-
-        // node.js configuration
-        if (0 < count($this->nodePaths)) {
-            $pb->setEnv('NODE_PATH', implode(':', $this->nodePaths));
-        }
-
-        $pb->add($this->nodeBin)->add($input = tempnam(sys_get_temp_dir(), 'assetic_underscore'));
-        file_put_contents($input, sprintf($format,
-            json_encode($parserOptions),
-            json_encode($asset->getContent()),
-            json_encode($treeOptions)
+        $pb = new ProcessBuilder(array(
+            $this->nodePath,
+            $this->underscoreTmplPath,
+            $input,
         ));
 
         $proc = $pb->getProcess();
@@ -85,7 +43,8 @@ EOF;
             throw new \RuntimeException($proc->getErrorOutput());
         }
 
-        $asset->setContent($proc->getOutput());
+        $processedContent = "JST['".$asset->getSourcePath()."'] = ".$proc->getOutput().";";
+        $asset->setContent($processedContent);
     }
 
     public function filterDump(AssetInterface $asset)

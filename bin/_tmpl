@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var _ = require('underscore');
+var util  = require('util');
+var fs = require('fs');
+
+var file = process.argv[2];
+var data = fs.readFileSync(file, 'utf8');
+util.print(_.template(data));
+
+process.exit(0);

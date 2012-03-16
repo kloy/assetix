@@ -4,6 +4,7 @@ namespace Assetix;
 
 // Composer autoloader
 require_once(ASSETIX_PATH.'/vendor/.composer/autoload.php');
+require_once(ASSETIX_PATH.'/classes/UnderscoreFilter.php');
 
 // Use Assetic namespaces
 use Assetic\Asset\AssetCollection;
@@ -17,6 +18,7 @@ use Assetic\Filter\LessFilter;
 use Assetic\Filter\Sass\SassFilter;
 use Assetic\Filter\Yui;
 use Assetic\Filter\CssEmbedFilter;
+use Assetix\Filter\UnderscoreFilter;
 use Assetic\Factory\AssetFactory;
 
 class Compiler
@@ -124,6 +126,17 @@ class Compiler
 		return $this->_render($assets, $filters);
 	}
 
+	// Get a underscore template asset
+	function underscore($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('underscore', '?yui_js');
+
+		return $this->_render($assets, $filters);
+	}
+
 	protected function _render($assets = array(), $filters = array())
 	{
 		// Setup AssetFactory
@@ -171,5 +184,6 @@ class Compiler
 		$css_embed->setMhtml(false);
 		$css_embed->setCharset('utf8');
 		$this->add_filter('css_embed', $css_embed);
+		$this->add_filter('underscore', new UnderscoreFilter($config['node_path']));
 	}
 }
