@@ -16,6 +16,7 @@ use Assetic\FilterManager;
 use Assetic\Filter\LessFilter;
 use Assetic\Filter\Sass\SassFilter;
 use Assetic\Filter\Yui;
+use Assetic\Filter\CssEmbedFilter;
 use Assetic\Factory\AssetFactory;
 
 class Compiler
@@ -96,7 +97,7 @@ class Compiler
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('?yui_css');
+		$filters = array('?yui_css', '?css_embed');
 
 		return $this->_render($assets, $filters);
 	}
@@ -107,7 +108,7 @@ class Compiler
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('less', '?yui_css');
+		$filters = array('less', '?yui_css', '?css_embed');
 
 		return $this->_render($assets, $filters);
 	}
@@ -149,14 +150,6 @@ class Compiler
 		call_user_func_array(array($this->_fm, "set"), $args);
 	}
 
-	protected function _setup_filters()
-	{
-		$config = $this->get_config();
-		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('less', new LessFilter($config['node_path']));
-	}
-
 	function get_config()
 	{
 		return $this->_config;
@@ -165,5 +158,18 @@ class Compiler
 	function write($contents)
 	{
 		$this->_aw->write(ASSETIX_PATH.'/production', $contents);
+	}
+
+	protected function _setup_filters()
+	{
+		$config = $this->get_config();
+		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
+		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
+		$this->add_filter('less', new LessFilter($config['node_path']));
+		$css_embed = new CssEmbedFilter($config['cssembed_path']);
+		$css_embed->setRoot($config['cssembed_root']);
+		$css_embed->setMhtml(false);
+		$css_embed->setCharset('utf8');
+		$this->add_filter('css_embed', $css_embed);
 	}
 }

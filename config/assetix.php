@@ -10,4 +10,6 @@ return array(
 	'node_path' => '/usr/bin/node',
 	// Path to use for cache
 	'cache_path' => ASSETIX_PATH.'/cache',
+	'cssembed_path' => ASSETIX_PATH.'/bin/cssembed-0.4.5.jar',
+	'cssembed_root' => ASSETIX_PATH.'/assets/images',
 );
