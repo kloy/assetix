@@ -62,10 +62,7 @@ class Assetix
 
 		$compiled = $this->_compiler->css($group, $files);
 
-		if ($raw === true)
-		{
-			return $compiled;
-		}
+		return $this->_render($compiled, $raw);
 	}
 
 	// Get a js asset
@@ -76,9 +73,25 @@ class Assetix
 
 		$compiled = $this->_compiler->js($group, $files);
 
+		return $this->_render($compiled, $raw);
+	}
+
+	// Get a js asset
+	function less($group = '')
+	{
+		$args = func_get_args();
+		list($files, $raw) = call_user_func_array(array($this, "_get_asset_args"), $args);
+
+		$compiled = $this->_compiler->less($group, $files);
+
+		return $this->_render($compiled, $raw);
+	}
+
+	protected function _render($contents, $raw = false)
+	{
 		if ($raw === true)
 		{
-			return $compiled;
+			return $contents;
 		}
 	}
 

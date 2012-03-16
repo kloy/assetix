@@ -101,6 +101,17 @@ class Compiler
 		return $this->_render($assets, $filters);
 	}
 
+	// Get a less asset
+	function less($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('less', '?yui_css');
+
+		return $this->_render($assets, $filters);
+	}
+
 	// Get a js asset
 	function js($group = '', $files = array())
 	{
