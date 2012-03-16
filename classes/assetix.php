@@ -10,8 +10,6 @@ require ASSETIX_PATH.'/classes/compiler.php';
 
 class Assetix
 {
-	protected $_compiled = null;
-
 	function __construct($config = array())
 	{
 		if (count($config) === 0)
