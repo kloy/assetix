@@ -25,7 +25,12 @@ class Assetix
 	{
 		$arg_count = func_num_args();
 		$args = func_get_args();
-		if ($arg_count === 2)
+		if ($arg_count === 1)
+		{
+			$files = array();
+			$raw = false;
+		}
+		else if ($arg_count === 2)
 		{
 			if (is_bool($args[1]))
 			{
