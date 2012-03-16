@@ -1,0 +1,15 @@
+{
+  "name": "assetix",
+  "preferGlobal": "false",
+  "version": "0.0.1",
+  "author": "Keith Loy <ckeithloy@gmail.com>",
+  "description": "grabs dependencies for assetix",
+  "dependencies" : {
+    "less"   :  "1.3.x",
+    "underscore": "1.3.x"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.6"
+  }
+}
