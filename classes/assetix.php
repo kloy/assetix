@@ -23,68 +23,77 @@ class Assetix
 	{
 		$arg_count = func_num_args();
 		$args = func_get_args();
-		if ($arg_count === 1)
+
+		$group = array_shift($args);
+		$type = array_pop($args);
+
+		if ($arg_count === 2)
 		{
 			$files = array();
 			$raw = false;
 		}
-		else if ($arg_count === 2)
+		else if ($arg_count === 3)
 		{
-			if (is_bool($args[1]))
+			if (is_bool($args[0]))
 			{
 				$files = array();
-				$raw = $args[1];
+				$raw = $args[0];
 			}
-			else if (is_array($args[1]))
+			else if (is_array($args[0]))
 			{
-				$files = $args[1];
+				$files = $args[0];
 				$raw = false;
 			}
 			else
 			{
-				throw new \Exception("Argument 2 must be an array of files or a bool.");
+				throw new \Exception("Argument 3 must be an array of files or a bool.");
 			}
 		}
 		else
 		{
-			$files = $args[1];
-			$raw = $args[2];
+			$files = $args[0];
+			$raw = $args[1];
 		}
 
-		return array($files, $raw);
+		return array($type, $group, $files, $raw);
+	}
+
+	protected function _asset()
+	{
+		$args = func_get_args();
+		list($type, $group, $files, $raw) = call_user_func_array(
+			array($this, "_get_asset_args"), $args);
+
+		$compiled = $this->_compiler->{$type}($group, $files);
+
+		return $this->_render($compiled, $raw);
 	}
 
 	// Get a css asset
-	function css($group = '')
+	function css()
 	{
 		$args = func_get_args();
-		list($files, $raw) = call_user_func_array(array($this, "_get_asset_args"), $args);
+		$args[] = 'css';
 
-		$compiled = $this->_compiler->css($group, $files);
-
-		return $this->_render($compiled, $raw);
+		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
 	// Get a js asset
-	function js($group = '')
+	function js()
 	{
 		$args = func_get_args();
-		list($files, $raw) = call_user_func_array(array($this, "_get_asset_args"), $args);
+		$args[] = 'js';
 
-		$compiled = $this->_compiler->js($group, $files);
-
-		return $this->_render($compiled, $raw);
+		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
 	// Get a js asset
-	function less($group = '')
+	function less()
 	{
 		$args = func_get_args();
-		list($files, $raw) = call_user_func_array(array($this, "_get_asset_args"), $args);
+		$args[] = 'less';
 
-		$compiled = $this->_compiler->less($group, $files);
-
-		return $this->_render($compiled, $raw);
+		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
 	protected function _render($contents, $raw = false)
