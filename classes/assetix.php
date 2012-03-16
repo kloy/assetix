@@ -2,11 +2,11 @@
 
 namespace Assetix;
 
-define('BASEPATH', __DIR__.'/..');
-define('ASSET_PATH', BASEPATH.'/assets');
+define('ASSETIX_PATH', __DIR__.'/..');
+define('ASSETIX_ASSET_PATH', ASSETIX_PATH.'/assets');
 
 // Composer autoloader
-require BASEPATH.'/classes/compiler.php';
+require ASSETIX_PATH.'/classes/compiler.php';
 
 class Assetix
 {
@@ -16,7 +16,7 @@ class Assetix
 	{
 		if (count($config) === 0)
 		{
-			$config = require(BASEPATH.'/config/assetix.php');
+			$config = require(ASSETIX_PATH.'/config/assetix.php');
 		}
 		$this->_compiler = new Compiler($config);
 	}

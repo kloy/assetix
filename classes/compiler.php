@@ -3,7 +3,7 @@
 namespace Assetix;
 
 // Composer autoloader
-require_once(BASEPATH.'/vendor/.composer/autoload.php');
+require_once(ASSETIX_PATH.'/vendor/.composer/autoload.php');
 
 // Use Assetic namespaces
 use Assetic\Asset\AssetCollection;
@@ -53,11 +53,11 @@ class Compiler
 		{
 			if (strpos($file, '*') === false)
 			{
-				$asset = new FileAsset(ASSET_PATH.$file);
+				$asset = new FileAsset(ASSETIX_ASSET_PATH.$file);
 			}
 			else
 			{
-				$asset = new GlobAsset(ASSET_PATH.$file);
+				$asset = new GlobAsset(ASSETIX_ASSET_PATH.$file);
 			}
 
 			$collection->add($asset);
@@ -115,7 +115,7 @@ class Compiler
 	protected function _render($assets = array(), $filters = array())
 	{
 		// Setup AssetFactory
-		$factory = new AssetFactory(ASSET_PATH);
+		$factory = new AssetFactory(ASSETIX_ASSET_PATH);
 		$factory->setAssetManager($this->get_am());
 		$factory->setFilterManager($this->get_fm());
 		$config = $this->get_config();
@@ -153,6 +153,6 @@ class Compiler
 
 	function write($contents)
 	{
-		$this->_aw->write(BASEPATH.'/production', $contents);
+		$this->_aw->write(ASSETIX_PATH.'/production', $contents);
 	}
 }

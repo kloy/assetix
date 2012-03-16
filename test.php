@@ -1,8 +1,10 @@
 <?php
 
-require('classes/assetix.php');
+require_once('classes/assetix.php');
 
-$assetix = new Assetix\Assetix();
+use Assetix\Assetix;
+
+$assetix = new Assetix();
 $css = array('/css/test.css');
 $assetix->css('base_css', $css);
 $js = array('/js/underscore.js', '/js/*');
