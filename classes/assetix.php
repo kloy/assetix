@@ -67,9 +67,20 @@ class Assetix
 		list($type, $group, $files, $raw) = call_user_func_array(
 			array($this, "_get_asset_args"), $args);
 
-		$compiled = $this->_compiler->{$type}($group, $files);
+		$asset_path = "/{$group}-".$this->get_version().".".$this->get_ext($type);
+		$path = $this->get_absolute_path().$asset_path;
 
-		return $this->_render($group, $type, $compiled, $raw);
+		if ( ! $raw and ! $this->is_debug() and is_file($path))
+		{
+			$asset = $this->get_path().$asset_path;
+		}
+		else
+		{
+			$compiled = $this->_compiler->{$type}($group, $files);
+			$asset = $this->_render($group, $type, $compiled, $raw);
+		}
+
+		return $asset;
 	}
 
 	// Get a css asset
