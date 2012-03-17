@@ -28,7 +28,10 @@ $underscore = array('/jst/*.jst');
 $assetix->underscore('base_underscore', $underscore);
 
 // Echo out raw compiled files
-echo $assetix->js('base_js', true)."\n";
-echo $assetix->css('base_css', true)."\n";
-echo $assetix->less('base_less', true)."\n";
-echo $assetix->underscore('base_underscore', true)."\n";
+// echo $assetix->js('base_js', true)."\n";
+// echo $assetix->css('base_css', true)."\n";
+// echo $assetix->less('base_less', true)."\n";
+// echo $assetix->underscore('base_underscore', true)."\n";
+echo $assetix->css('base_css')."\n";
+echo $assetix->less('base_less')."\n";
+echo $assetix->js('base_js')."\n";

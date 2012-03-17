@@ -116,7 +116,19 @@ class Assetix
 		}
 		else
 		{
-			call_user_func_array(array($this, "write"), func_get_args());
+			if ($this->is_debug())
+			{
+				$version = md5($contents);
+			}
+			else
+			{
+				$version = $this->get_version();
+			}
+
+			$asset_path = "/{$group}-{$version}.".$this->get_ext($type);
+			$this->write($this->get_absolute_path().$asset_path, $contents);
+
+			return $this->get_path().$asset_path;
 		}
 	}
 
@@ -125,12 +137,22 @@ class Assetix
 		return $this->_config;
 	}
 
+	function get_absolute_path()
+	{
+		return $this->_config['output_absolute_path'];
+	}
+
+	function get_path()
+	{
+		return $this->_config['output_path'];
+	}
+
 	function get_version()
 	{
 		return $this->_config['assets_version'];
 	}
 
-	function get_debug()
+	function is_debug()
 	{
 		return $this->_config['debug'];
 	}
@@ -152,10 +174,8 @@ class Assetix
 		}
 	}
 
-	function write($group, $type, $contents)
+	function write($path, $contents)
 	{
-		$path = ASSETIX_ASSET_PATH."/production/{$group}.".$this->get_ext($type);
-
 		if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0777, true)) {
             throw new \Exception('Unable to create directory '.$dir);
         }

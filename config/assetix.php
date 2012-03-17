@@ -15,6 +15,6 @@ return array(
 	'underscore_namespace' => 'JST',
 	'underscore_ext' => '.jst',
 	'output_absolute_path' => ASSETIX_ASSET_PATH.'/production',
-	'output_path' => '/production',
+	'output_path' => '/assets/production',
 	'assets_version' => '0.0.1',
 );
