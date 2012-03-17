@@ -3,3 +3,4 @@ node_modules/*
 composer.lock
 composer.phar
 cache/*
+assets/production/*

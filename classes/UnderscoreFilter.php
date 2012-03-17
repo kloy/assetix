@@ -15,26 +15,25 @@ use Assetic\Util\ProcessBuilder;
  */
 class UnderscoreFilter implements FilterInterface
 {
-    private $underscoreTmplPath;
-    private $nodePath;
+    private $namespace;
+    private $ext;
 
-    public function __construct($underscoreTmplPath = "", $nodePath = '/usr/bin/node')
+    public function __construct($namespace = 'JST', $ext = '.jst')
     {
-        $this->underscoreTmplPath = ASSETIX_PATH.'/bin/_tmpl';
-        $this->nodePath = $nodePath;
+        $this->namespace = $namespace;
+        $this->ext = $ext;
     }
 
     public function filterLoad(AssetInterface $asset)
     {
-        $template_name = $asset->getSourcePath();
+        $namespace = $this->namespace;
+        $ext = $this->ext;
+        $template_name = str_replace($ext, '', $asset->getSourcePath());
         $template_contents = addslashes(
             preg_replace("/[\n\r\t ]+/"," ",$asset->getContent())
         );
-        $content = 'window.JST = window.JST || {};'
-                    . PHP_EOL
-                    . "window.JST['{$template_name}'] = _.template("
-                    . "'{$template_contents}');"
-                    . PHP_EOL;
+        $content = "{$namespace}['{$template_name}'] = _.template("
+                    . "'{$template_contents}');" . PHP_EOL;
 
         $asset->setContent($content);
     }

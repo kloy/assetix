@@ -133,8 +133,11 @@ class Compiler
 
 		$assets = array('@'.$group);
 		$filters = array('underscore', '?yui_js');
+		$rendered = $this->_render($assets, $filters);
+		$config = $this->get_config();
 
-		return $this->_render($assets, $filters);
+		$ns = $config['underscore_namespace'];
+		return "var {$ns} = {$ns} || {};".PHP_EOL.$rendered;
 	}
 
 	protected function _render($assets = array(), $filters = array())
@@ -184,6 +187,7 @@ class Compiler
 		$css_embed->setMhtml(false);
 		$css_embed->setCharset('utf8');
 		$this->add_filter('css_embed', $css_embed);
-		$this->add_filter('underscore', new UnderscoreFilter($config['node_path']));
+		$this->add_filter('underscore', new UnderscoreFilter(
+			$config['underscore_namespace']), $config['underscore_ext']);
 	}
 }

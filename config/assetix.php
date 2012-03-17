@@ -12,4 +12,6 @@ return array(
 	'cache_path' => ASSETIX_PATH.'/cache',
 	'cssembed_path' => ASSETIX_PATH.'/bin/cssembed-0.4.5.jar',
 	'cssembed_root' => ASSETIX_PATH.'/assets/images',
+	'underscore_namespace' => 'JST',
+	'underscore_ext' => '.jst',
 );
