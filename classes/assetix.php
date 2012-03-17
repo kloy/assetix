@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Assetix.
+ *
+ * @package    Assetix
+ * @version    0.0.1
+ * @author     Keith Loy
+ * @license    MIT License
+ * @copyright  2012 Keith Loy
+ * @link       http://keithloy.me
+ */
+
 namespace Assetix;
 
 define('ASSETIX_PATH', __DIR__.'/..');
@@ -8,6 +19,16 @@ define('ASSETIX_ASSET_PATH', ASSETIX_PATH.'/assets');
 // Composer autoloader
 require ASSETIX_PATH.'/classes/compiler.php';
 
+/**
+ * Assetix Class
+ *
+ * Primary point of entry for Assetix package. Provides simple "interfaces" for compiling
+ * and rendering assets.
+ *
+ * @package     Assetix
+ * @category    Assetix
+ * @author      Keith Loy
+ */
 class Assetix
 {
 	protected $_config = array();

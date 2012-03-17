@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Assetix.
+ *
+ * @package    Assetix
+ * @version    0.0.1
+ * @author     Keith Loy
+ * @license    MIT License
+ * @copyright  2012 Keith Loy
+ * @link       http://keithloy.me
+ */
+
 namespace Assetix;
 
 // Composer autoloader
@@ -21,6 +32,16 @@ use Assetic\Filter\CssEmbedFilter;
 use Assetix\Filter\UnderscoreFilter;
 use Assetic\Factory\AssetFactory;
 
+/**
+ * Assetix Compiler Class
+ *
+ * Abstracts out usage of Assetic allowing for assets to be compiled with pre-configured
+ * Assetic filters.
+ *
+ * @package     Assetix
+ * @category    Assetix
+ * @author      Keith Loy
+ */
 class Compiler
 {
 	// Assetic AssetManager

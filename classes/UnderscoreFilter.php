@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Assetix.
+ *
+ * @package    Assetix
+ * @version    0.0.1
+ * @author     Keith Loy
+ * @license    MIT License
+ * @copyright  2012 Keith Loy
+ * @link       http://keithloy.me
+ */
+
 namespace Assetix\Filter;
 
 require_once(ASSETIX_PATH.'/vendor/.composer/autoload.php');
@@ -9,9 +20,12 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Util\ProcessBuilder;
 
 /**
- * Loads Underscore JS Template files.
+ * Assetic Filter for UnderscoreJS Templates
  *
- * @author Keith Loy <ckeithloy@gmail.com>
+ * @package     Assetix
+ * @subpackage  Filter
+ * @category    Filter
+ * @author      Keith Loy
  */
 class UnderscoreFilter implements FilterInterface
 {
