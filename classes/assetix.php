@@ -31,8 +31,10 @@ require ASSETIX_PATH.'/classes/compiler.php';
  */
 class Assetix
 {
+	// Config array
 	protected $_config = array();
 
+	// Constructor. Takes and array of config settings.
 	function __construct($config = array())
 	{
 		if (count($config) === 0)
@@ -41,67 +43,6 @@ class Assetix
 		}
 		$this->_config = $config;
 		$this->_compiler = new Compiler($config);
-	}
-
-	function _get_asset_args()
-	{
-		$arg_count = func_num_args();
-		$args = func_get_args();
-
-		$group = array_shift($args);
-		$type = array_pop($args);
-
-		if ($arg_count === 2)
-		{
-			$files = array();
-			$raw = false;
-		}
-		else if ($arg_count === 3)
-		{
-			if (is_bool($args[0]))
-			{
-				$files = array();
-				$raw = $args[0];
-			}
-			else if (is_array($args[0]))
-			{
-				$files = $args[0];
-				$raw = false;
-			}
-			else
-			{
-				throw new \Exception("Argument 3 must be an array of files or a bool.");
-			}
-		}
-		else
-		{
-			$files = $args[0];
-			$raw = $args[1];
-		}
-
-		return array($type, $group, $files, $raw);
-	}
-
-	protected function _asset()
-	{
-		$args = func_get_args();
-		list($type, $group, $files, $raw) = call_user_func_array(
-			array($this, "_get_asset_args"), $args);
-
-		$asset_path = "/{$group}-".$this->get_version().".".$this->get_ext($type);
-		$path = $this->get_absolute_path().$asset_path;
-
-		if ( ! $raw and ! $this->is_debug() and is_file($path))
-		{
-			$asset = $this->get_path().$asset_path;
-		}
-		else
-		{
-			$compiled = $this->_compiler->{$type}($group, $files);
-			$asset = $this->_render($group, $type, $compiled, $raw);
-		}
-
-		return $asset;
 	}
 
 	// Get a css asset
@@ -140,6 +81,69 @@ class Assetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
+	// Redundant asset logic
+	protected function _asset()
+	{
+		$args = func_get_args();
+		list($type, $group, $files, $raw) = call_user_func_array(
+			array($this, "_get_asset_args"), $args);
+
+		$asset_path = "/{$group}-".$this->get_version().".".$this->determine_ext($type);
+		$path = $this->get_absolute_path().$asset_path;
+
+		if ( ! $raw and ! $this->is_debug() and is_file($path))
+		{
+			$asset = $this->get_path().$asset_path;
+		}
+		else
+		{
+			$compiled = $this->_compiler->{$type}($group, $files);
+			$asset = $this->_render($group, $type, $compiled, $raw);
+		}
+
+		return $asset;
+	}
+
+	protected function _get_asset_args()
+	{
+		$arg_count = func_num_args();
+		$args = func_get_args();
+
+		$group = array_shift($args);
+		$type = array_pop($args);
+
+		if ($arg_count === 2)
+		{
+			$files = array();
+			$raw = false;
+		}
+		else if ($arg_count === 3)
+		{
+			if (is_bool($args[0]))
+			{
+				$files = array();
+				$raw = $args[0];
+			}
+			else if (is_array($args[0]))
+			{
+				$files = $args[0];
+				$raw = false;
+			}
+			else
+			{
+				throw new \Exception("Argument 3 must be an array of files or a bool.");
+			}
+		}
+		else
+		{
+			$files = $args[0];
+			$raw = $args[1];
+		}
+
+		return array($type, $group, $files, $raw);
+	}
+
+	// Asset render logic
 	protected function _render($group, $type, $contents, $raw = false)
 	{
 		if ($raw === true)
@@ -157,39 +161,45 @@ class Assetix
 				$version = $this->get_version();
 			}
 
-			$asset_path = "/{$group}-{$version}.".$this->get_ext($type);
+			$asset_path = "/{$group}-{$version}.".$this->determine_ext($type);
 			$this->write($this->get_absolute_path().$asset_path, $contents);
 
 			return $this->get_path().$asset_path;
 		}
 	}
 
+	// Returns the config
 	function get_config()
 	{
 		return $this->_config;
 	}
 
+	// Returns the output_absolute_path config setting
 	function get_absolute_path()
 	{
 		return $this->_config['output_absolute_path'];
 	}
 
+	// Returns the output_path config setting
 	function get_path()
 	{
 		return $this->_config['output_path'];
 	}
 
+	// Returns the version config setting
 	function get_version()
 	{
 		return $this->_config['assets_version'];
 	}
 
+	// Returns the debug config setting
 	function is_debug()
 	{
 		return $this->_config['debug'];
 	}
 
-	function get_ext($type)
+	// Takes a type and returns the appropriate extension
+	function determine_ext($type)
 	{
 		switch ($type)
 		{
@@ -206,6 +216,7 @@ class Assetix
 		}
 	}
 
+	// Writes contents to a path
 	function write($path, $contents)
 	{
 		if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0777, true)) {
