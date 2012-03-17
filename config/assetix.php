@@ -14,4 +14,7 @@ return array(
 	'cssembed_root' => ASSETIX_PATH.'/assets/images',
 	'underscore_namespace' => 'JST',
 	'underscore_ext' => '.jst',
+	'output_absolute_path' => ASSETIX_ASSET_PATH.'/production',
+	'output_path' => '/production',
+	'assets_version' => '0.0.1',
 );

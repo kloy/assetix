@@ -10,12 +10,15 @@ require ASSETIX_PATH.'/classes/compiler.php';
 
 class Assetix
 {
+	protected $_config = array();
+
 	function __construct($config = array())
 	{
 		if (count($config) === 0)
 		{
 			$config = require(ASSETIX_PATH.'/config/assetix.php');
 		}
+		$this->_config = $config;
 		$this->_compiler = new Compiler($config);
 	}
 
@@ -115,6 +118,21 @@ class Assetix
 		{
 			call_user_func_array(array($this, "write"), func_get_args());
 		}
+	}
+
+	function get_config()
+	{
+		return $this->_config;
+	}
+
+	function get_version()
+	{
+		return $this->_config['assets_version'];
+	}
+
+	function get_debug()
+	{
+		return $this->_config['debug'];
 	}
 
 	function get_ext($type)
