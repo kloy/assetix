@@ -3,12 +3,6 @@
 	<title>Testing</title>
 	<script type="text/javascript" src="assets/production/base_js.js"></script>
 	<script type="text/javascript" src="assets/production/base_underscore.js"></script>
-	<script>
-		var tmpl = JST['test.jst']({
-			'name':'foo'
-		});
-		console.log(tmpl);
-	</script>
 </head>
 <body>
 

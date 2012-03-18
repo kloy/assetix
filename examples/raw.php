@@ -1,12 +1,14 @@
 <?php
 
-require_once('classes/assetix.php');
+$base_dir = dirname(__FILE__).'/..';
+
+require_once("$base_dir/classes/assetix.php");
 
 use Assetix\Assetix;
 
 // Clear cache for testing purposes
-`rm cache/*`;
-`rm assets/production/*`;
+shell_exec("rm $base_dir/cache/*");
+shell_exec("rm $base_dir/assets/production/*");
 
 // Instantiate Assetix
 $assetix = new Assetix();
@@ -29,9 +31,6 @@ $assetix->underscore('base_underscore', $underscore);
 
 // Echo out raw compiled files
 // echo $assetix->js('base_js', true)."\n";
-// echo $assetix->css('base_css', true)."\n";
-// echo $assetix->less('base_less', true)."\n";
-// echo $assetix->underscore('base_underscore', true)."\n";
-echo $assetix->css('base_css')."\n";
-echo $assetix->less('base_less')."\n";
-echo $assetix->js('base_js')."\n";
+echo $assetix->css('base_css', true)."\n";
+echo $assetix->less('base_less', true)."\n";
+echo $assetix->underscore('base_underscore', true)."\n";
