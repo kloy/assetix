@@ -32,8 +32,12 @@ $assetix->js('base_js', $js);
 $underscore = array('/jst/*.jst');
 $assetix->underscore('base_underscore', $underscore);
 
+// Add coffee-script files to group base_coffee
+$assetix->coffee('base_coffee', array('/coffee/test.coffee'));
+
 // Echo out raw compiled files
 echo $assetix->js('base_js')."\n";
 echo $assetix->css('base_css')."\n";
 echo $assetix->less('base_less')."\n";
 echo $assetix->underscore('base_underscore')."\n";
+echo $assetix->coffee('base_coffee')."\n";

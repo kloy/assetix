@@ -8,6 +8,7 @@ return array(
 	'yuicompressor_path' => ASSETIX_PATH.'/bin/yuicompressor-2.4.7.jar',
 	// Path to nodejs executable
 	'node_path' => '/usr/bin/node',
+	'coffee_path' => '/usr/bin/coffee',
 	// Path to use for asset cache
 	'cache_path' => ASSETIX_PATH.'/cache',
 	// Path to cssembed jar

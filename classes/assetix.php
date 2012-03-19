@@ -71,6 +71,15 @@ class Assetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
+	// Get a coffee-script asset
+	function coffee()
+	{
+		$args = func_get_args();
+		$args[] = 'coffee';
+
+		return call_user_func_array(array($this, "_asset"), $args);
+	}
+
 	// Get a underscore asset
 	function underscore()
 	{
@@ -209,6 +218,8 @@ class Assetix
 			case "js":
 				return "js";
 			case "underscore":
+				return "js";
+			case "coffee":
 				return "js";
 			default:
 				throw \Exception("Type $type does not has an extension");

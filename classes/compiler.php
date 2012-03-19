@@ -29,6 +29,7 @@ use Assetic\Filter\LessFilter;
 use Assetic\Filter\Sass\SassFilter;
 use Assetic\Filter\Yui;
 use Assetic\Filter\CssEmbedFilter;
+use Assetic\Filter\CoffeeScriptFilter;
 use Assetix\Filter\UnderscoreFilter;
 use Assetic\Factory\AssetFactory;
 
@@ -147,6 +148,17 @@ class Compiler
 		return $this->_render($assets, $filters);
 	}
 
+	// Get a coffee asset
+	function coffee($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('coffee', '?yui_js');
+
+		return $this->_render($assets, $filters);
+	}
+
 	// Get a underscore template asset
 	function underscore($group = '', $files = array())
 	{
@@ -218,5 +230,7 @@ class Compiler
 		$this->add_filter('css_embed', $css_embed);
 		$this->add_filter('underscore', new UnderscoreFilter(
 			$config['underscore_namespace']), $config['underscore_ext']);
+		$this->add_filter('coffee', new CoffeeScriptFilter(
+			$config['coffee_path'], $config['node_path']));
 	}
 }
