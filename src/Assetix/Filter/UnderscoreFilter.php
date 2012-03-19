@@ -13,8 +13,6 @@
 
 namespace Assetix\Filter;
 
-require_once(ASSETIX_PATH.'/vendor/.composer/autoload.php');
-
 use Assetic\Filter\FilterInterface;
 use Assetic\Asset\AssetInterface;
 use Assetic\Util\ProcessBuilder;

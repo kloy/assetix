@@ -2,7 +2,7 @@
 
 $base_dir = dirname(__FILE__).'/..';
 
-require_once("$base_dir/classes/assetix.php");
+require $base_dir.'/vendor/.composer/autoload.php';
 
 use Assetix\Assetix;
 

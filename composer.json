@@ -17,6 +17,6 @@
         "kriswallsmith/assetic": "1.0.*"
     },
     "autoload": {
-    	"psr-0": { "Assetic": "classes/" }
+    	"psr-0": { "Assetix": "src/" }
     }
 }

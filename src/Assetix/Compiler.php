@@ -13,10 +13,6 @@
 
 namespace Assetix;
 
-// Composer autoloader
-require_once(ASSETIX_PATH.'/vendor/.composer/autoload.php');
-require_once(ASSETIX_PATH.'/classes/UnderscoreFilter.php');
-
 // Use Assetic namespaces
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetCache;
@@ -221,9 +217,14 @@ class Compiler
 		return $this->_config['asset_path'];
 	}
 
+	function get_absolute_path()
+	{
+		return $this->_config['output_absolute_path'];
+	}
+
 	function write($contents)
 	{
-		$this->_aw->write(ASSETIX_PATH.'/production', $contents);
+		$this->_aw->write($this->get_absolute_path(), $contents);
 	}
 
 	protected function _setup_filters()
