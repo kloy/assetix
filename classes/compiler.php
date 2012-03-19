@@ -122,7 +122,7 @@ class Compiler
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('?yui_css', '?css_embed');
+		$filters = array('?css_embed', '?yui_css');
 
 		return $this->_render($assets, $filters);
 	}
@@ -133,7 +133,7 @@ class Compiler
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('less', '?yui_css', '?css_embed');
+		$filters = array('less', '?css_embed', '?yui_css');
 
 		return $this->_render($assets, $filters);
 	}
@@ -144,7 +144,7 @@ class Compiler
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('styl', '?yui_css', '?css_embed');
+		$filters = array('styl', '?css_embed', '?yui_css');
 
 		return $this->_render($assets, $filters);
 	}

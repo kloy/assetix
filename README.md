@@ -32,3 +32,30 @@ Assetix uses [composer](http://getcomposer.org/) for including
 	// Echo out links to compiled files
 	echo $assetix->css('base_css')."\n";
 	echo $assetix->js('base_js')."\n";
+
+## Available asset function
+
+Assetix features the ability to compile many assets. All functions implement the same
+argument structure. This structure is
+`func('group', array() /* asset paths */, bool /* true for raw outputting, false for a link */)`.
+As you may have noticed, you can call func() without an array of assets if you just wish to
+get a link from a previously defined group. You may call it with a second argument of true
+to get the raw output of the group. The current list of asset functions is below...
+
+*	css() - normal css stylesheet
+*	less() - less css
+*	styl() - stylus css
+*	js() - normal javascript
+*	coffee() - coffee-script
+*	underscore() - underscore javascript templates
+
+## How does the build process work?
+
+The assets are lazily built on the first request for them. Once built they are cached so
+further builds for the same asset is not needed. In a production setting you will assign
+a version number in the assetix config. When this version number is changed all assets are
+rebuilt and a new file with this version number is generated for cache busting purposes.
+
+Assets that become css are first compiled to css, then images are embedded into the css
+via datauri and base64 encoding, last the assets get minimized. Assets that become js are
+compiled to js and minimized.
