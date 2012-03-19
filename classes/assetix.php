@@ -62,6 +62,15 @@ class Assetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
+	// Get a stylus asset
+	function styl()
+	{
+		$args = func_get_args();
+		$args[] = 'styl';
+
+		return call_user_func_array(array($this, "_asset"), $args);
+	}
+
 	// Get a js asset
 	function js()
 	{
@@ -214,6 +223,8 @@ class Assetix
 			case "css":
 				return "css";
 			case "less":
+				return "css";
+			case "styl":
 				return "css";
 			case "js":
 				return "js";

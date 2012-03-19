@@ -30,6 +30,7 @@ use Assetic\Filter\Sass\SassFilter;
 use Assetic\Filter\Yui;
 use Assetic\Filter\CssEmbedFilter;
 use Assetic\Filter\CoffeeScriptFilter;
+use Assetic\Filter\StylusFilter;
 use Assetix\Filter\UnderscoreFilter;
 use Assetic\Factory\AssetFactory;
 
@@ -137,6 +138,17 @@ class Compiler
 		return $this->_render($assets, $filters);
 	}
 
+	// Get a stylus asset
+	function styl($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('styl', '?yui_css', '?css_embed');
+
+		return $this->_render($assets, $filters);
+	}
+
 	// Get a js asset
 	function js($group = '', $files = array())
 	{
@@ -220,6 +232,7 @@ class Compiler
 		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
 		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
 		$this->add_filter('less', new LessFilter($config['node_path']));
+		$this->add_filter('styl', new StylusFilter($config['node_path']));
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
 		if ($config['cssembed_root'] !== false)
 		{

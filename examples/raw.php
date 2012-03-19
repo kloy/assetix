@@ -35,9 +35,14 @@ $assetix->underscore('base_underscore', $underscore);
 // Add coffee-script files to group base_coffee
 $assetix->coffee('base_coffee', array('/coffee/test.coffee'));
 
+// Add styl files to group base_styl
+$styl = array('/styl/test.styl');
+$assetix->styl('base_styl', $styl);
+
 // Echo out raw compiled files
 echo $assetix->js('base_js', true)."\n";
 echo $assetix->css('base_css', true)."\n";
 echo $assetix->less('base_less', true)."\n";
 echo $assetix->underscore('base_underscore', true)."\n";
 echo $assetix->coffee('base_coffee', true)."\n";
+echo $assetix->styl('base_styl', true)."\n";
