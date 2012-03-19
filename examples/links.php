@@ -14,7 +14,7 @@ $prod_path = "$base_dir/assets/production/*";
 array_map("unlink", glob($prod_path));
 
 // Instantiate Assetix
-$assetix = new Assetix();
+$assetix = new Assetix(require("$base_dir/config/assetix.php"));
 
 // Add css files to group base_css
 $css = array('/css/test.css');
