@@ -33,6 +33,13 @@ Assetix uses [composer](http://getcomposer.org/) for including
 	echo $assetix->css('base_css')."\n";
 	echo $assetix->js('base_js')."\n";
 
+## Installation
+
+Follow the instructions on [Packagist](http://packagist.org/) to add
+"kloy/assetix": "0.0.*" in the require section of your composer.json file and install.
+Once installed run `npm install .` from the vendor/kloy/assetix/ dir. This will install
+the needed nodejs modules for compiling less, stylus, and coffeescript.
+
 ## Available asset function
 
 Assetix features the ability to compile many assets. All functions implement the same
