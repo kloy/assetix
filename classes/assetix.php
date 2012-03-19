@@ -14,7 +14,6 @@
 namespace Assetix;
 
 define('ASSETIX_PATH', __DIR__.'/..');
-define('ASSETIX_ASSET_PATH', ASSETIX_PATH.'/assets');
 
 // Composer autoloader
 require ASSETIX_PATH.'/classes/compiler.php';

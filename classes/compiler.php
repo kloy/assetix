@@ -77,11 +77,11 @@ class Compiler
 		{
 			if (strpos($file, '*') === false)
 			{
-				$asset = new FileAsset(ASSETIX_ASSET_PATH.$file);
+				$asset = new FileAsset($this->get_asset_path().$file);
 			}
 			else
 			{
-				$asset = new GlobAsset(ASSETIX_ASSET_PATH.$file);
+				$asset = new GlobAsset($this->get_asset_path().$file);
 			}
 
 			$collection->add($asset);
@@ -164,7 +164,7 @@ class Compiler
 	protected function _render($assets = array(), $filters = array())
 	{
 		// Setup AssetFactory
-		$factory = new AssetFactory(ASSETIX_ASSET_PATH);
+		$factory = new AssetFactory($this->get_asset_path());
 		$factory->setAssetManager($this->get_am());
 		$factory->setFilterManager($this->get_fm());
 		$config = $this->get_config();
@@ -190,6 +190,11 @@ class Compiler
 	function get_config()
 	{
 		return $this->_config;
+	}
+
+	function get_asset_path()
+	{
+		return $this->_config['asset_path'];
 	}
 
 	function write($contents)
