@@ -12,7 +12,7 @@ return array(
 	'cache_path' => ASSETIX_PATH.'/cache',
 	// Path to cssembed jar
 	'cssembed_path' => ASSETIX_PATH.'/bin/cssembed-0.4.5.jar',
-	'cssembed_root' => ASSETIX_PATH.'/assets/images',
+	'cssembed_root' => false,
 	// Javascript namespace to compile templates under
 	'underscore_namespace' => 'JST',
 	// Extension for underscore files

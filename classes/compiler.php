@@ -209,7 +209,10 @@ class Compiler
 		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
 		$this->add_filter('less', new LessFilter($config['node_path']));
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
-		$css_embed->setRoot($config['cssembed_root']);
+		if ($config['cssembed_root'] !== false)
+		{
+			$css_embed->setRoot($config['cssembed_root']);
+		}
 		$css_embed->setMhtml(false);
 		$css_embed->setCharset('utf8');
 		$this->add_filter('css_embed', $css_embed);
