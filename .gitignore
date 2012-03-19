@@ -4,3 +4,4 @@ composer.lock
 composer.phar
 cache/*
 assets/production/*
+examples/document_viewer/*
