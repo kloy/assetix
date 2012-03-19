@@ -29,12 +29,6 @@ Assetix uses [composer](http://getcomposer.org/) for including
 	echo $assetix->css('base_css', true)."\n";
 	echo $assetix->js('base_js', true)."\n";
 
-## TODO
-
-*	Implement IE 6,7 no data uri support. Currently all css is run through the cssembed filter.
-*	Implement more javascript templates support.
-*	Hook up coffeescript.
-*	Hook up stylus.
-*	Add some tests.
-*	Add better documentation and examples.
-*	Write a hook for FuelPHP.
+	// Echo out links to compiled files
+	echo $assetix->css('base_css')."\n";
+	echo $assetix->js('base_js')."\n";
