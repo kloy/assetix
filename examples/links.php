@@ -25,7 +25,7 @@ $less = array('/less/test.less');
 $assetix->less('base_less', $less);
 
 // Add js files to group base_js
-$js = array('/js/underscore.js', '/js/*');
+$js = array('/js/*');
 $assetix->js('base_js', $js);
 
 // Add js files to group base_js

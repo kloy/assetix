@@ -231,8 +231,8 @@ class Compiler
 		$config = $this->get_config();
 		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
 		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('less', new LessFilter($config['node_path']));
-		$this->add_filter('styl', new StylusFilter($config['node_path']));
+		$this->add_filter('less', new LessFilter($config['node_path'], $config['node_paths']));
+		$this->add_filter('styl', new StylusFilter($config['node_path'], $config['node_paths']));
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
 		if ($config['cssembed_root'] !== false)
 		{
