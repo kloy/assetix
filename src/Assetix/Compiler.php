@@ -28,6 +28,7 @@ use Assetic\Filter\CssEmbedFilter;
 use Assetic\Filter\CoffeeScriptFilter;
 use Assetic\Filter\StylusFilter;
 use Assetix\Filter\UnderscoreFilter;
+use Assetix\Filter\HandlebarsFilter;
 use Assetic\Factory\AssetFactory;
 
 /**
@@ -113,34 +114,40 @@ class Compiler
 	}
 
 	// Get a css asset
-	function css($group = '', $files = array())
+	function css($group = '', $files = array(), $is_ie = false)
 	{
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('?css_embed', '?yui_css');
+		$filters = array();
+		$filters[] = 'less';
+		if ($is_ie === false) $filters[] = '?css_embed';
 
 		return $this->_render($assets, $filters);
 	}
 
 	// Get a less asset
-	function less($group = '', $files = array())
+	function less($group = '', $files = array(), $is_ie = false)
 	{
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('less', '?css_embed', '?yui_css');
+		$filters = array();
+		$filters[] = 'less';
+		if ($is_ie === false) $filters[] = '?css_embed';
 
 		return $this->_render($assets, $filters);
 	}
 
 	// Get a stylus asset
-	function styl($group = '', $files = array())
+	function styl($group = '', $files = array(), $is_ie = false)
 	{
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('styl', '?css_embed', '?yui_css');
+		$filters = array();
+		$filters[] = 'styl';
+		if ($is_ie === false) $filters[] = '?css_embed';
 
 		return $this->_render($assets, $filters);
 	}
@@ -163,6 +170,17 @@ class Compiler
 
 		$assets = array('@'.$group);
 		$filters = array('coffee', '?yui_js');
+
+		return $this->_render($assets, $filters);
+	}
+
+	// Get a handlebars asset
+	function handlebars($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('handlebars', '?yui_js');
 
 		return $this->_render($assets, $filters);
 	}
@@ -222,6 +240,11 @@ class Compiler
 		return $this->_config['output_absolute_path'];
 	}
 
+	function is_debug()
+	{
+		return $this->_config['debug'];
+	}
+
 	function write($contents)
 	{
 		$this->_aw->write($this->get_absolute_path(), $contents);
@@ -231,9 +254,15 @@ class Compiler
 	{
 		$config = $this->get_config();
 		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('less', new LessFilter($config['node_path'], $config['node_paths']));
-		$this->add_filter('styl', new StylusFilter($config['node_path'], $config['node_paths']));
+		$less = new LessFilter($config['node_path'], $config['node_paths']);
+		$styl = new StylusFilter($config['node_path'], $config['node_paths']);
+		if ($this->is_debug() === false)
+		{
+			$less->setCompress(true);
+			$styl->setCompress(true);
+		}
+		$this->add_filter('less', $less);
+		$this->add_filter('styl', $styl);
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
 		if ($config['cssembed_root'] !== false)
 		{
@@ -246,5 +275,7 @@ class Compiler
 			$config['underscore_namespace']), $config['underscore_ext']);
 		$this->add_filter('coffee', new CoffeeScriptFilter(
 			$config['coffee_path'], $config['node_path']));
+		$this->add_filter('handlebars', new HandlebarsFilter(
+			$config['handlebars_path'], $config['node_path']));
 	}
 }
