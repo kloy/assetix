@@ -58,61 +58,6 @@ class Compiler
 		$this->_setup_filters();
 	}
 
-	function get_am()
-	{
-		return $this->_am;
-	}
-
-	function get_fm()
-	{
-		return $this->_fm;
-	}
-
-	protected function _to_collection($files)
-	{
-		$collection = new AssetCollection();
-
-		foreach($files as $file)
-		{
-			if (strpos($file, '*') === false)
-			{
-				$asset = new FileAsset($this->get_asset_path().$file);
-			}
-			else
-			{
-				$asset = new GlobAsset($this->get_asset_path().$file);
-			}
-
-			$collection->add($asset);
-		}
-
-		return $collection;
-	}
-
-	protected function _to_cache(AssetCollection $collection)
-	{
-		$config = $this->get_config();
-		$system_cache = new FilesystemCache($config['cache_path']);
-
-		$cached = new AssetCache($collection, $system_cache);
-
-		return $cached;
-	}
-
-	// All asset methods use this logic for checking variables and adding assets
-	protected function _asset($group, $files)
-	{
-		if ($group === '') throw new \Exception("group must be defined");
-		if (! is_array($files)) throw new \Exception("files must be an array");
-
-		if (count($files) !== 0)
-		{
-			$collection = $this->_to_collection($files);
-			$cached = $this->_to_cache($collection);
-			$this->add_asset($group, $cached);
-		}
-	}
-
 	// Get a css asset
 	function css($group = '', $files = array(), $is_ie = false)
 	{
@@ -199,6 +144,51 @@ class Compiler
 		return "var {$ns} = {$ns} || {};".PHP_EOL.$rendered;
 	}
 
+	protected function _to_collection($files)
+	{
+		$collection = new AssetCollection();
+
+		foreach($files as $file)
+		{
+			if (strpos($file, '*') === false)
+			{
+				$asset = new FileAsset($this->get_asset_path().$file);
+			}
+			else
+			{
+				$asset = new GlobAsset($this->get_asset_path().$file);
+			}
+
+			$collection->add($asset);
+		}
+
+		return $collection;
+	}
+
+	protected function _to_cache(AssetCollection $collection)
+	{
+		$config = $this->get_config();
+		$system_cache = new FilesystemCache($config['cache_path']);
+
+		$cached = new AssetCache($collection, $system_cache);
+
+		return $cached;
+	}
+
+	// All asset methods use this logic for checking variables and adding assets
+	protected function _asset($group, $files)
+	{
+		if ($group === '') throw new \Exception("group must be defined");
+		if (! is_array($files)) throw new \Exception("files must be an array");
+
+		if (count($files) !== 0)
+		{
+			$collection = $this->_to_collection($files);
+			$cached = $this->_to_cache($collection);
+			$this->add_asset($group, $cached);
+		}
+	}
+
 	protected function _render($assets = array(), $filters = array())
 	{
 		// Setup AssetFactory
@@ -211,43 +201,53 @@ class Compiler
 		return $factory->createAsset($assets, $filters)->dump();
 	}
 
-	function add_asset()
+	protected function add_asset()
 	{
 		if (count(func_num_args()) === 0) throw new \Exception("asset cannot be empty");
 		$args = func_get_args();
 		call_user_func_array(array($this->_am, "set"), $args);
 	}
 
-	function add_filter()
+	protected function add_filter()
 	{
 		if (count(func_num_args()) === 0) throw new \Exception("filter cannot be empty");
 		$args = func_get_args();
 		call_user_func_array(array($this->_fm, "set"), $args);
 	}
 
-	function get_config()
+	protected function get_config()
 	{
 		return $this->_config;
 	}
 
-	function get_asset_path()
+	protected function get_asset_path()
 	{
 		return $this->_config['asset_path'];
 	}
 
-	function get_absolute_path()
+	protected function get_absolute_path()
 	{
 		return $this->_config['output_absolute_path'];
 	}
 
-	function is_debug()
+	protected function is_debug()
 	{
 		return $this->_config['debug'];
 	}
 
-	function write($contents)
+	protected function write($contents)
 	{
 		$this->_aw->write($this->get_absolute_path(), $contents);
+	}
+
+	protected function get_am()
+	{
+		return $this->_am;
+	}
+
+	protected function get_fm()
+	{
+		return $this->_fm;
 	}
 
 	protected function _setup_filters()
