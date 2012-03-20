@@ -44,6 +44,8 @@ class Assetix
 			'node_paths' => array($assetix_path.'/node_modules'),
 			// Path to coffeescript compiler
 			'coffee_path' => $assetix_path.'/node_modules/.bin/coffee',
+			// Path to handlebars compiler
+			'handlebars_path' => $assetix_path.'/node_modules/.bin/handlebars',
 			// Path to use for asset cache
 			'cache_path' => $assetix_path.'/cache',
 			// Path to cssembed jar
@@ -118,6 +120,15 @@ class Assetix
 	{
 		$args = func_get_args();
 		$args[] = 'underscore';
+
+		return call_user_func_array(array($this, "_asset"), $args);
+	}
+
+	// Get a handlebars asset
+	function handlebars()
+	{
+		$args = func_get_args();
+		$args[] = 'handlebars';
 
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
@@ -258,6 +269,8 @@ class Assetix
 			case "underscore":
 				return "js";
 			case "coffee":
+				return "js";
+			case "handlebars":
 				return "js";
 			default:
 				throw \Exception("Type $type does not has an extension");

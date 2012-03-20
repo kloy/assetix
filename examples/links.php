@@ -53,17 +53,25 @@ $assetix->coffee('base_coffee', array('/coffee/test.coffee'));
 $delay = round(microtime(true) - $delay, 4) . " seconds";
 echo "Coffee delay:\t$delay\n";
 
-// Add js files to group base_js
+// Add underscore files to group base_underscore
 $delay = microtime(true);
 $underscore = array('/jst/*.jst');
 $assetix->underscore('base_underscore', $underscore);
 $delay = round(microtime(true) - $delay, 4) . " seconds";
 echo "Underscore delay:\t$delay\n";
 
+// Add handlebars files to group base_handlebars
+$delay = microtime(true);
+$handlebars = array('/handlebars/*.handlebars');
+$assetix->handlebars('base_handlebars', $handlebars);
+$delay = round(microtime(true) - $delay, 4) . " seconds";
+echo "Handlebars delay:\t$delay\n";
+
 // Echo out raw compiled files
-// echo $assetix->js('base_js')."\n";
-// echo $assetix->coffee('base_coffee')."\n";
-// echo $assetix->underscore('base_underscore')."\n";
+echo $assetix->js('base_js')."\n";
+echo $assetix->coffee('base_coffee')."\n";
+echo $assetix->underscore('base_underscore')."\n";
+echo $assetix->handlebars('base_handlebars')."\n";
 echo $assetix->css('base_css')."\n";
 echo $assetix->css('ie_base_css')."\n";
 echo $assetix->less('base_less')."\n";

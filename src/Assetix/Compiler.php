@@ -28,6 +28,7 @@ use Assetic\Filter\CssEmbedFilter;
 use Assetic\Filter\CoffeeScriptFilter;
 use Assetic\Filter\StylusFilter;
 use Assetix\Filter\UnderscoreFilter;
+use Assetix\Filter\HandlebarsFilter;
 use Assetic\Factory\AssetFactory;
 
 /**
@@ -173,6 +174,17 @@ class Compiler
 		return $this->_render($assets, $filters);
 	}
 
+	// Get a handlebars asset
+	function handlebars($group = '', $files = array())
+	{
+		$this->_asset($group, $files);
+
+		$assets = array('@'.$group);
+		$filters = array('handlebars', '?yui_js');
+
+		return $this->_render($assets, $filters);
+	}
+
 	// Get a underscore template asset
 	function underscore($group = '', $files = array())
 	{
@@ -263,5 +275,7 @@ class Compiler
 			$config['underscore_namespace']), $config['underscore_ext']);
 		$this->add_filter('coffee', new CoffeeScriptFilter(
 			$config['coffee_path'], $config['node_path']));
+		$this->add_filter('handlebars', new HandlebarsFilter(
+			$config['handlebars_path'], $config['node_path']));
 	}
 }
