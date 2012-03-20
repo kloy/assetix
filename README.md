@@ -35,7 +35,7 @@ Assetix uses [composer](http://getcomposer.org/) for including
 ## Installation
 
 Follow the instructions on [Packagist](http://packagist.org/) to add
-"kloy/assetix": "0.*" in the require section of your composer.json file and install.
+"kloy/assetix": "0.1.*" in the require section of your composer.json file and install.
 Once installed run `npm install .` from the vendor/kloy/assetix/ dir. This will install
 the needed nodejs modules for compiling less, stylus, and coffeescript.
 

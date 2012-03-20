@@ -4,7 +4,7 @@
  * Assetix.
  *
  * @package    Assetix
- * @version    0.1.0
+ * @version    0.1.1
  * @author     Keith Loy
  * @license    MIT License
  * @copyright  2012 Keith Loy
