@@ -1,8 +1,7 @@
 # Assetix
 
-A simple wrapper for easily using Assetic. Project is still in heavy development, but the
-end goal is to provide a simple way for including assets and letting Assetic build and
-cache them in production.
+A simple wrapper for easily using Assetic. Provides a simple way for including assets and
+letting Assetic build and cache them in production.
 
 Assetix uses [composer](http://getcomposer.org/) for including
 [Assetic](https://github.com/kriswallsmith/assetic). Follow the steps at
@@ -77,3 +76,8 @@ In order to work around this you can prefix 'ie_' to a group's name. Here is an 
 
 This will cause the compiler to not use the embedcss filter which means all images will be
 requested as normal.
+
+## API
+
+The public available APIs are described in interfaces. Currently the iAssetix and iCompiler
+interfaces exist. This project follows [Semantic Versioning](http://semver.org/).
