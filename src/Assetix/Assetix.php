@@ -42,11 +42,13 @@ class Assetix
 			'node_path' => '/usr/bin/node',
 			// Paths used in require by node
 			'node_paths' => array($assetix_path.'/node_modules'),
+			// Path to coffeescript compiler
 			'coffee_path' => $assetix_path.'/node_modules/.bin/coffee',
 			// Path to use for asset cache
 			'cache_path' => $assetix_path.'/cache',
 			// Path to cssembed jar
 			'cssembed_path' => $assetix_path.'/bin/cssembed-0.4.5.jar',
+			// root path to convert relative uri to. set to false to just let it be relative.
 			'cssembed_root' => false,
 			// Javascript namespace to compile templates under
 			'underscore_namespace' => 'JST',
@@ -58,6 +60,7 @@ class Assetix
 			'output_path' => '/assets/production',
 			// Current assets version. Update to break production cache.
 			'assets_version' => '0.0.1',
+			// Path assets are located at
 			'asset_path' => $assetix_path.'/assets',
 		), $config);
 
@@ -123,7 +126,7 @@ class Assetix
 	protected function _asset()
 	{
 		$args = func_get_args();
-		list($type, $group, $files, $raw) = call_user_func_array(
+		list($type, $group, $files, $raw, $is_ie) = call_user_func_array(
 			array($this, "_get_asset_args"), $args);
 
 		$asset_path = "/{$group}-".$this->get_version().".".$this->determine_ext($type);
@@ -135,7 +138,7 @@ class Assetix
 		}
 		else
 		{
-			$compiled = $this->_compiler->{$type}($group, $files);
+			$compiled = $this->_compiler->{$type}($group, $files, $is_ie);
 			$asset = $this->_render($group, $type, $compiled, $raw);
 		}
 
@@ -178,7 +181,10 @@ class Assetix
 			$raw = $args[1];
 		}
 
-		return array($type, $group, $files, $raw);
+		// check if this group should have ie true passed.
+		$is_ie = (substr(trim($group), 0, 3) === 'ie_') ? true : false;
+
+		return array($type, $group, $files, $raw, $is_ie);
 	}
 
 	// Asset render logic

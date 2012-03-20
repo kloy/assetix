@@ -113,34 +113,42 @@ class Compiler
 	}
 
 	// Get a css asset
-	function css($group = '', $files = array())
+	function css($group = '', $files = array(), $is_ie = false)
 	{
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('?css_embed', '?yui_css');
+		$filters = array();
+		if ($is_ie === false) $filters[] = '?css_embed';
+		$filters[] = '?yui_css';
 
 		return $this->_render($assets, $filters);
 	}
 
 	// Get a less asset
-	function less($group = '', $files = array())
+	function less($group = '', $files = array(), $is_ie = false)
 	{
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('less', '?css_embed', '?yui_css');
+		$filters = array();
+		$filters[] = 'less';
+		if ($is_ie === false) $filters[] = '?css_embed';
+		$filters[] = '?yui_css';
 
 		return $this->_render($assets, $filters);
 	}
 
 	// Get a stylus asset
-	function styl($group = '', $files = array())
+	function styl($group = '', $files = array(), $is_ie = false)
 	{
 		$this->_asset($group, $files);
 
 		$assets = array('@'.$group);
-		$filters = array('styl', '?css_embed', '?yui_css');
+		$filters = array();
+		$filters[] = 'styl';
+		if ($is_ie === false) $filters[] = '?css_embed';
+		$filters[] = '?yui_css';
 
 		return $this->_render($assets, $filters);
 	}
