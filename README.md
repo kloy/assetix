@@ -55,6 +55,7 @@ to get the raw output of the group. The current list of asset functions is below
 *	js() - normal javascript
 *	coffee() - coffee-script
 *	underscore() - underscore javascript templates
+*	handlebars() - handlebars javascript templates
 
 ## How does the build process work?
 
@@ -66,3 +67,13 @@ rebuilt and a new file with this version number is generated for cache busting p
 Assets that become css are first compiled to css, then images are embedded into the css
 via datauri and base64 encoding, last the assets get minimized. Assets that become js are
 compiled to js and minimized.
+
+## Internet Explorer Version 7 and below.
+
+IE 7 and below does not support datauri functionality used for embedding images into css.
+In order to work around this you can prefix 'ie_' to a group's name. Here is an example.
+
+`css('ie_foo', array('css/*'));`
+
+This will cause the compiler to not use the embedcss filter which means all images will be
+requested as normal.
