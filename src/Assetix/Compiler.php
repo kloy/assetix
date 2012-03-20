@@ -119,8 +119,8 @@ class Compiler
 
 		$assets = array('@'.$group);
 		$filters = array();
+		$filters[] = 'less';
 		if ($is_ie === false) $filters[] = '?css_embed';
-		$filters[] = '?yui_css';
 
 		return $this->_render($assets, $filters);
 	}
@@ -134,7 +134,6 @@ class Compiler
 		$filters = array();
 		$filters[] = 'less';
 		if ($is_ie === false) $filters[] = '?css_embed';
-		$filters[] = '?yui_css';
 
 		return $this->_render($assets, $filters);
 	}
@@ -148,7 +147,6 @@ class Compiler
 		$filters = array();
 		$filters[] = 'styl';
 		if ($is_ie === false) $filters[] = '?css_embed';
-		$filters[] = '?yui_css';
 
 		return $this->_render($assets, $filters);
 	}
@@ -230,6 +228,11 @@ class Compiler
 		return $this->_config['output_absolute_path'];
 	}
 
+	function is_debug()
+	{
+		return $this->_config['debug'];
+	}
+
 	function write($contents)
 	{
 		$this->_aw->write($this->get_absolute_path(), $contents);
@@ -239,9 +242,15 @@ class Compiler
 	{
 		$config = $this->get_config();
 		$this->add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('yui_css', new Yui\CssCompressorFilter($config['yuicompressor_path']));
-		$this->add_filter('less', new LessFilter($config['node_path'], $config['node_paths']));
-		$this->add_filter('styl', new StylusFilter($config['node_path'], $config['node_paths']));
+		$less = new LessFilter($config['node_path'], $config['node_paths']);
+		$styl = new StylusFilter($config['node_path'], $config['node_paths']);
+		if ($this->is_debug() === false)
+		{
+			$less->setCompress(true);
+			$styl->setCompress(true);
+		}
+		$this->add_filter('less', $less);
+		$this->add_filter('styl', $styl);
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
 		if ($config['cssembed_root'] !== false)
 		{
