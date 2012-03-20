@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Assetix.
  *
  * @package    Assetix
- * @version    0.0.2
+ * @version    0.1.0
  * @author     Keith Loy
  * @license    MIT License
  * @copyright  2012 Keith Loy
@@ -12,6 +11,27 @@
  */
 
 namespace Assetix;
+
+interface iAssetix
+{
+	/**
+	 * Returns a link to the asset file or the raw output of the assets.
+	 * css, less, styl, js, coffee, underscore, handlebars
+	 *
+	 * @param string $group group to use for file name and later references
+	 * @param array $files optional array of files to be passed for compilation
+	 * @param bool $raw optional last argument for specifying raw output of assets
+	 *
+	 * @return string link to file or raw output
+	 */
+	public function css();
+	public function less();
+	public function styl();
+	public function js();
+	public function coffee();
+	public function underscore();
+	public function handlebars();
+}
 
 /**
  * Assetix Class
@@ -23,13 +43,13 @@ namespace Assetix;
  * @category    Assetix
  * @author      Keith Loy
  */
-class Assetix
+class Assetix implements iAssetix
 {
 	// Config array
 	protected $_config = array();
 
 	// Constructor. Takes and array of config settings.
-	function __construct($config = array())
+	public function __construct($config = array())
 	{
 		$assetix_path = dirname(__FILE__).'/../..';
 		$config = array_merge(array(
@@ -71,7 +91,7 @@ class Assetix
 	}
 
 	// Get a css asset
-	function css()
+	public function css()
 	{
 		$args = func_get_args();
 		$args[] = 'css';
@@ -80,7 +100,7 @@ class Assetix
 	}
 
 	// Get a less asset
-	function less()
+	public function less()
 	{
 		$args = func_get_args();
 		$args[] = 'less';
@@ -89,7 +109,7 @@ class Assetix
 	}
 
 	// Get a stylus asset
-	function styl()
+	public function styl()
 	{
 		$args = func_get_args();
 		$args[] = 'styl';
@@ -98,7 +118,7 @@ class Assetix
 	}
 
 	// Get a js asset
-	function js()
+	public function js()
 	{
 		$args = func_get_args();
 		$args[] = 'js';
@@ -107,7 +127,7 @@ class Assetix
 	}
 
 	// Get a coffee-script asset
-	function coffee()
+	public function coffee()
 	{
 		$args = func_get_args();
 		$args[] = 'coffee';
@@ -116,7 +136,7 @@ class Assetix
 	}
 
 	// Get a underscore asset
-	function underscore()
+	public function underscore()
 	{
 		$args = func_get_args();
 		$args[] = 'underscore';
@@ -125,7 +145,7 @@ class Assetix
 	}
 
 	// Get a handlebars asset
-	function handlebars()
+	public function handlebars()
 	{
 		$args = func_get_args();
 		$args[] = 'handlebars';
@@ -140,12 +160,12 @@ class Assetix
 		list($type, $group, $files, $raw, $is_ie) = call_user_func_array(
 			array($this, "_get_asset_args"), $args);
 
-		$asset_path = "/{$group}-".$this->get_version().".".$this->determine_ext($type);
-		$path = $this->get_absolute_path().$asset_path;
+		$asset_path = "/{$group}-".$this->_get_version().".".$this->_determine_ext($type);
+		$path = $this->_get_absolute_path().$asset_path;
 
-		if ( ! $raw and ! $this->is_debug() and is_file($path))
+		if ( ! $raw and ! $this->_is_debug() and is_file($path))
 		{
-			$asset = $this->get_path().$asset_path;
+			$asset = $this->_get_path().$asset_path;
 		}
 		else
 		{
@@ -207,54 +227,54 @@ class Assetix
 		}
 		else
 		{
-			if ($this->is_debug())
+			if ($this->_is_debug())
 			{
 				$version = md5($contents);
 			}
 			else
 			{
-				$version = $this->get_version();
+				$version = $this->_get_version();
 			}
 
-			$asset_path = "/{$group}-{$version}.".$this->determine_ext($type);
-			$this->write($this->get_absolute_path().$asset_path, $contents);
+			$asset_path = "/{$group}-{$version}.".$this->_determine_ext($type);
+			$this->_write($this->_get_absolute_path().$asset_path, $contents);
 
-			return $this->get_path().$asset_path;
+			return $this->_get_path().$asset_path;
 		}
 	}
 
 	// Returns the config
-	function get_config()
+	protected function _get_config()
 	{
 		return $this->_config;
 	}
 
 	// Returns the output_absolute_path config setting
-	function get_absolute_path()
+	protected function _get_absolute_path()
 	{
 		return $this->_config['output_absolute_path'];
 	}
 
 	// Returns the output_path config setting
-	function get_path()
+	protected function _get_path()
 	{
 		return $this->_config['output_path'];
 	}
 
 	// Returns the version config setting
-	function get_version()
+	protected function _get_version()
 	{
 		return $this->_config['assets_version'];
 	}
 
 	// Returns the debug config setting
-	function is_debug()
+	protected function _is_debug()
 	{
 		return $this->_config['debug'];
 	}
 
 	// Takes a type and returns the appropriate extension
-	function determine_ext($type)
+	protected function _determine_ext($type)
 	{
 		switch ($type)
 		{
@@ -278,7 +298,7 @@ class Assetix
 	}
 
 	// Writes contents to a path
-	function write($path, $contents)
+	protected function _write($path, $contents)
 	{
 		if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0777, true)) {
             throw new \Exception('Unable to create directory '.$dir);
