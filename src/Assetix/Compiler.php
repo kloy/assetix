@@ -38,7 +38,7 @@ use Assetic\Filter\Yui;
 use Assetic\Filter\CssEmbedFilter;
 use Assetic\Filter\CoffeeScriptFilter;
 use Assetic\Filter\StylusFilter;
-use Assetic\Filter\CssRewriteFilter;
+use Assetix\Filter\MyCssRewriteFilter;
 use Assetix\Filter\UnderscoreFilter;
 use Assetix\Filter\HandlebarsFilter;
 use Assetic\Factory\AssetFactory;
@@ -289,7 +289,7 @@ class Compiler implements iCompiler
 			$less->setCompress(true);
 			$styl->setCompress(true);
 		}
-		$this->_add_filter('css_rewrite', new CssRewriteFilter());
+		$this->_add_filter('css_rewrite', new MyCssRewriteFilter());
 		$this->_add_filter('less', $less);
 		$this->_add_filter('styl', $styl);
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
