@@ -25,18 +25,21 @@ use Assetic\Util\ProcessBuilder;
  */
 class MyCssRewriteFilter implements FilterInterface
 {
-    private $urlPath;
+    private $replacement;
+    private $pattern;
 
-    public function __construct($urlPath = '/foo/')
+    public function __construct($replacement = '/foo/', $pattern = '../')
     {
-        $this->urlPath = $urlPath;
+        $this->replacement = $replacement;
+        $this->pattern = $pattern;
     }
 
     public function filterLoad(AssetInterface $asset)
     {
-        $path = $this->getUrlPath();
+        $replacement = $this->getReplacement();
+        $pattern = $this->getPattern();
         $content = $asset->getContent();
-        $content = str_replace('../', $path, $content);
+        $content = str_replace($pattern, $replacement, $content);
 
         $asset->setContent($content);
     }
@@ -45,13 +48,23 @@ class MyCssRewriteFilter implements FilterInterface
     {
     }
 
-    public function setUrlPath($urlPath = '')
+    public function setReplacement($replacement = '')
     {
-        $this->urlPath = $urlPath;
+        $this->replacement = $replacement;
     }
 
-    public function getUrlPath()
+    public function getReplacement()
     {
-        return $this->urlPath;
+        return $this->replacement;
+    }
+
+    public function setPattern($regex = '')
+    {
+        $this->pattern = $regex;
+    }
+
+    public function getPattern()
+    {
+        return $this->pattern;
     }
 }

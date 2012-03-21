@@ -47,6 +47,8 @@ class Assetix implements iAssetix
 {
 	// Config array
 	protected $_config = array();
+	// Instance of Compiler
+	protected $_compiler = null;
 
 	// Constructor. Takes and array of config settings.
 	public function __construct($config = array())
@@ -164,6 +166,15 @@ class Assetix implements iAssetix
 		// output_absolute_path
 		$path = $this->_get_absolute_path().'/*';
 		array_map("unlink", glob($path));
+	}
+
+	public function set_rewrite($replacement, $pattern = null)
+	{
+		$this->_compiler->set_css_rewrite_replacement($replacement);
+		if ($pattern !== null)
+		{
+			$this->_compiler->set_css_rewrite_pattern($pattern);
+		}
 	}
 
 	// Redundant asset logic

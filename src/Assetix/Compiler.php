@@ -177,6 +177,20 @@ class Compiler implements iCompiler
 		return "var {$ns} = {$ns} || {};".PHP_EOL.$rendered;
 	}
 
+	public function set_css_rewrite_replacement($replacement)
+	{
+		$fm = $this->_get_fm();
+		$css_rewrite = $fm->get('css_rewrite');
+		$css_rewrite->setReplacement($replacement);
+	}
+
+	public function set_css_rewrite_pattern($pattern)
+	{
+		$fm = $this->_get_fm();
+		$css_rewrite = $fm->get('css_rewrite');
+		$css_rewrite->setPattern($pattern);
+	}
+
 	protected function _to_collection($files)
 	{
 		$collection = new AssetCollection();
