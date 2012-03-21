@@ -1,0 +1,9 @@
+body {
+  color: #309296;
+}
+blockquote {
+  border: 2px solid #309296;
+}
+.logo {
+  background-image: url(/foo/images/gravatar.jpeg);
+}

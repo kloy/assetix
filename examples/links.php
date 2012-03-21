@@ -1,8 +1,8 @@
 <?php
 
-$base_dir = dirname(__FILE__).'/..';
+$base_dir = dirname(__FILE__);
 
-require $base_dir.'/vendor/.composer/autoload.php';
+require $base_dir.'/../vendor/.composer/autoload.php';
 
 use Assetix\Assetix;
 
@@ -14,7 +14,7 @@ $prod_path = "$base_dir/assets/production/*";
 array_map("unlink", glob($prod_path));
 
 // Instantiate Assetix
-$assetix = new Assetix(require("$base_dir/config/assetix.php"));
+$assetix = new Assetix(require("config/assetix.php"));
 
 // Add css files to group base_css
 $delay = microtime(true);
