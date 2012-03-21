@@ -17,9 +17,9 @@ $assetix->clear_cache();
 $assetix->clear_production();
 
 $test1 = $assetix->css('ie_base_css', array('/rewrite_css/test.1.css'), true);
-$assetix->set_rewrite('/bar/', '../../');
+$assetix->set_rewrite('\\1/foo/');
 $test2 = $assetix->css('ie_base_css', array('/rewrite_css/test.2.css'), true);
-$assetix->set_rewrite('/man/', '../../../');
+$assetix->set_rewrite('\\1/bar/');
 $test3 = $assetix->css('ie_base_css', array('/rewrite_css/test.3.css'), true);
 
 echo "### TEST 1 ###\n$test1\n";

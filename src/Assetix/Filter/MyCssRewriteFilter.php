@@ -28,7 +28,14 @@ class MyCssRewriteFilter implements FilterInterface
     private $replacement;
     private $pattern;
 
-    public function __construct($replacement = '/foo/', $pattern = '../')
+    // Replacement to use when pattern is matched during css rewrite
+    // //1 concats the first group matched i nthe pattern to the string, e. g.
+    // ' or "
+    // Pattern to match when rewriting css
+    // Pattern matches ../ recursively, safely working with or without quotes.
+    // This is used to swap out relative paths in a css file with a path by default.
+    // It of course could be used for rewriting anything in a css file however.
+    public function __construct($replacement = '\\1/assets/production/', $pattern = '/(\((\"|\'|))(\.\.\/)*/')
     {
         $this->replacement = $replacement;
         $this->pattern = $pattern;
@@ -39,7 +46,7 @@ class MyCssRewriteFilter implements FilterInterface
         $replacement = $this->getReplacement();
         $pattern = $this->getPattern();
         $content = $asset->getContent();
-        $content = str_replace($pattern, $replacement, $content);
+        $content = preg_replace($pattern, $replacement, $content);
 
         $asset->setContent($content);
     }
@@ -48,7 +55,7 @@ class MyCssRewriteFilter implements FilterInterface
     {
     }
 
-    public function setReplacement($replacement = '')
+    public function setReplacement($replacement)
     {
         $this->replacement = $replacement;
     }
@@ -58,7 +65,7 @@ class MyCssRewriteFilter implements FilterInterface
         return $this->replacement;
     }
 
-    public function setPattern($regex = '')
+    public function setPattern($regex)
     {
         $this->pattern = $regex;
     }

@@ -75,9 +75,14 @@ class Assetix implements iAssetix
 			// root path to convert relative uri to. set to false to just let it be relative.
 			'cssembed_root' => false,
 			// Pattern to match when rewriting css
-			'css_rewrite_pattern' => '../',
+			// Pattern matches ../ recursively, safely working with or without quotes.
+			// This is used to swap out relative paths in a css file with a path by default.
+			// It of course could be used for rewriting anything in a css file however.
+			'css_rewrite_pattern' => '/(\((\"|\'|))(\.\.\/)*/',
 			// Replacement to use when pattern is matched during css rewrite
-			'css_rewrite_replacement' => '/foo/',
+			// //1 concats the first group matched i nthe pattern to the string, e. g.
+			// ' or "
+			'css_rewrite_replacement' => '\\1/assets/production/',
 			// Javascript namespace to compile templates under
 			'underscore_namespace' => 'JST',
 			// Extension for underscore files
