@@ -81,7 +81,7 @@ class Assetix implements iAssetix
 			// Pattern matches ../ recursively, safely working with or without quotes.
 			// This is used to swap out relative paths in a css file with a path by default.
 			// It of course could be used for rewriting anything in a css file however.
-			'css_rewrite_pattern' => '/(\((\"|\'|))(\.\.\/)*/',
+			'css_rewrite_pattern' => '/(url\((\"|\'|))(\.\.\/)+/',
 			// Replacement to use when pattern is matched during css rewrite
 			// //1 concats the first group matched i nthe pattern to the string, e. g.
 			// ' or "

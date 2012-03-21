@@ -35,7 +35,7 @@ class MyCssRewriteFilter implements FilterInterface
     // Pattern matches ../ recursively, safely working with or without quotes.
     // This is used to swap out relative paths in a css file with a path by default.
     // It of course could be used for rewriting anything in a css file however.
-    public function __construct($replacement = '\\1/assets/production/', $pattern = '/(\((\"|\'|))(\.\.\/)*/')
+    public function __construct($replacement = '\\1/assets/production/', $pattern = '/(url\((\"|\'|))(\.\.\/)+/')
     {
         $this->replacement = $replacement;
         $this->pattern = $pattern;
