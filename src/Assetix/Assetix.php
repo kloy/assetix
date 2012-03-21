@@ -31,6 +31,9 @@ interface iAssetix
 	public function coffee();
 	public function underscore();
 	public function handlebars();
+
+	/* On the fly filter modifiers */
+	public function set_rewrite($replacement, $pattern);
 }
 
 /**
