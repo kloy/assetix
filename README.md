@@ -77,6 +77,28 @@ In order to work around this you can prefix 'ie_' to a group's name. Here is an 
 This will cause the compiler to not use the embedcss filter which means all images will be
 requested as normal.
 
+## Rewriting CSS
+
+By the default all relative ../ paths are replaced with /assets/production/. To modify this
+behavior change $config['css_rewrite_replacement'] to use a different replacement value or
+$config['css_rewrite_pattern'] to use a different pattern for matching.The way the
+css rewrite works is the content of a css file is passed through preg_replace. So make sure
+your values for $config['css_rewrite_replacement'] and $config['css_rewrite_pattern'] work
+properly with this function.
+
+To modify the css rewrite on the fly you can call $assetix->set_rewrite($replacement, $pattern);
+
+Example:
+
+	$assetix->set_rewrite('\\1/foo/');
+	$test2 = $assetix->css('ie_base_css', array('/rewrite_css/test.2.css'), true);
+
+All calls to $assetix->css will use the set replacement value for now on. To change the
+replacement value again just call $assetix->set_rewrite() with new values.
+
+To better understand how css rewrite works take a look at Assetix::_construct() and Assetix::set_rewrite()
+and follow the code back to MyCssRewriteFilter.
+
 ## API
 
 The public available APIs are described in interfaces. Currently the iAssetix and iCompiler
