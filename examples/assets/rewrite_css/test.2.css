@@ -1,0 +1,7 @@
+body {
+	background: black;
+}
+
+.logo {
+	background-image: url(../../images/gravatar.jpeg);
+}

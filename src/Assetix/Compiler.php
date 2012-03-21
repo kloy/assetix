@@ -38,6 +38,7 @@ use Assetic\Filter\Yui;
 use Assetic\Filter\CssEmbedFilter;
 use Assetic\Filter\CoffeeScriptFilter;
 use Assetic\Filter\StylusFilter;
+use Assetix\Filter\MyCssRewriteFilter;
 use Assetix\Filter\UnderscoreFilter;
 use Assetix\Filter\HandlebarsFilter;
 use Assetic\Factory\AssetFactory;
@@ -77,7 +78,14 @@ class Compiler implements iCompiler
 		$assets = array('@'.$group);
 		$filters = array();
 		$filters[] = 'less';
-		if ($is_ie === false) $filters[] = '?css_embed';
+		if ($is_ie === true or $this->_is_debug() === true)
+		{
+			$filters[] = 'css_rewrite';
+		}
+		else
+		{
+			$filters[] = 'css_embed';
+		}
 
 		return $this->_render($assets, $filters);
 	}
@@ -90,7 +98,14 @@ class Compiler implements iCompiler
 		$assets = array('@'.$group);
 		$filters = array();
 		$filters[] = 'less';
-		if ($is_ie === false) $filters[] = '?css_embed';
+		if ($is_ie === true or $this->_is_debug() === true)
+		{
+			$filters[] = 'css_rewrite';
+		}
+		else
+		{
+			$filters[] = 'css_embed';
+		}
 
 		return $this->_render($assets, $filters);
 	}
@@ -103,7 +118,14 @@ class Compiler implements iCompiler
 		$assets = array('@'.$group);
 		$filters = array();
 		$filters[] = 'styl';
-		if ($is_ie === false) $filters[] = '?css_embed';
+		if ($is_ie === true or $this->_is_debug() === true)
+		{
+			$filters[] = 'css_rewrite';
+		}
+		else
+		{
+			$filters[] = 'css_embed';
+		}
 
 		return $this->_render($assets, $filters);
 	}
@@ -153,6 +175,20 @@ class Compiler implements iCompiler
 
 		$ns = $config['underscore_namespace'];
 		return "var {$ns} = {$ns} || {};".PHP_EOL.$rendered;
+	}
+
+	public function set_css_rewrite_replacement($replacement)
+	{
+		$fm = $this->_get_fm();
+		$css_rewrite = $fm->get('css_rewrite');
+		$css_rewrite->setReplacement($replacement);
+	}
+
+	public function set_css_rewrite_pattern($pattern)
+	{
+		$fm = $this->_get_fm();
+		$css_rewrite = $fm->get('css_rewrite');
+		$css_rewrite->setPattern($pattern);
 	}
 
 	protected function _to_collection($files)
@@ -267,6 +303,8 @@ class Compiler implements iCompiler
 			$less->setCompress(true);
 			$styl->setCompress(true);
 		}
+		$this->_add_filter('css_rewrite', new MyCssRewriteFilter(
+			$config['css_rewrite_replacement'], $config['css_rewrite_pattern']));
 		$this->_add_filter('less', $less);
 		$this->_add_filter('styl', $styl);
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);

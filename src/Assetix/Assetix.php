@@ -31,6 +31,9 @@ interface iAssetix
 	public function coffee();
 	public function underscore();
 	public function handlebars();
+
+	/* On the fly filter modifiers */
+	public function set_rewrite($replacement, $pattern);
 }
 
 /**
@@ -47,6 +50,8 @@ class Assetix implements iAssetix
 {
 	// Config array
 	protected $_config = array();
+	// Instance of Compiler
+	protected $_compiler = null;
 
 	// Constructor. Takes and array of config settings.
 	public function __construct($config = array())
@@ -72,6 +77,15 @@ class Assetix implements iAssetix
 			'cssembed_path' => $assetix_path.'/bin/cssembed-0.4.5.jar',
 			// root path to convert relative uri to. set to false to just let it be relative.
 			'cssembed_root' => false,
+			// Pattern to match when rewriting css
+			// Pattern matches ../ recursively, safely working with or without quotes.
+			// This is used to swap out relative paths in a css file with a path by default.
+			// It of course could be used for rewriting anything in a css file however.
+			'css_rewrite_pattern' => '/(\((\"|\'|))(\.\.\/)*/',
+			// Replacement to use when pattern is matched during css rewrite
+			// //1 concats the first group matched i nthe pattern to the string, e. g.
+			// ' or "
+			'css_rewrite_replacement' => '\\1/assets/production/',
 			// Javascript namespace to compile templates under
 			'underscore_namespace' => 'JST',
 			// Extension for underscore files
@@ -151,6 +165,28 @@ class Assetix implements iAssetix
 		$args[] = 'handlebars';
 
 		return call_user_func_array(array($this, "_asset"), $args);
+	}
+
+	public function clear_cache()
+	{
+		$path = $this->_get_cache_path().'/*';
+		array_map("unlink", glob($path));
+	}
+
+	public function clear_production()
+	{
+		// output_absolute_path
+		$path = $this->_get_absolute_path().'/*';
+		array_map("unlink", glob($path));
+	}
+
+	public function set_rewrite($replacement, $pattern = null)
+	{
+		$this->_compiler->set_css_rewrite_replacement($replacement);
+		if ($pattern !== null)
+		{
+			$this->_compiler->set_css_rewrite_pattern($pattern);
+		}
 	}
 
 	// Redundant asset logic
@@ -247,6 +283,11 @@ class Assetix implements iAssetix
 	protected function _get_config()
 	{
 		return $this->_config;
+	}
+
+	protected function _get_cache_path()
+	{
+		return $this->_config['cache_path'];
 	}
 
 	// Returns the output_absolute_path config setting

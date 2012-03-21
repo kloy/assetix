@@ -1,20 +1,18 @@
 <?php
 
-$base_dir = dirname(__FILE__).'/..';
+$base_dir = dirname(__FILE__);
 
-require $base_dir.'/vendor/.composer/autoload.php';
+require $base_dir.'/../vendor/.composer/autoload.php';
 
 use Assetix\Assetix;
 
+// Instantiate Assetix
+$assetix = new Assetix(require("config/assetix.php"));
+
 // Clear cache and production assets for testing purposes. Do not do this unless you wish
 // to force recompilation even when an asset has not been changed.
-$cache_path = "$base_dir/cache/*";
-array_map("unlink", glob($cache_path));
-$prod_path = "$base_dir/assets/production/*";
-array_map("unlink", glob($prod_path));
-
-// Instantiate Assetix
-$assetix = new Assetix(require("$base_dir/config/assetix.php"));
+$assetix->clear_cache();
+$assetix->clear_production();
 
 // Add css files to group base_css
 $css = array('/css/test.css');
