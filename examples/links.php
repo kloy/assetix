@@ -6,15 +6,13 @@ require $base_dir.'/../vendor/.composer/autoload.php';
 
 use Assetix\Assetix;
 
-// Clear cache and production assets for testing purposes. Do not do this unless you wish
-// to force recompilation even when an asset has not been changed.
-$cache_path = "$base_dir/cache/*";
-array_map("unlink", glob($cache_path));
-$prod_path = "$base_dir/assets/production/*";
-array_map("unlink", glob($prod_path));
-
 // Instantiate Assetix
 $assetix = new Assetix(require("config/assetix.php"));
+
+// Clear cache and production assets for testing purposes. Do not do this unless you wish
+// to force recompilation even when an asset has not been changed.
+$assetix->clear_cache();
+$assetix->clear_production();
 
 // Add css files to group base_css
 $delay = microtime(true);

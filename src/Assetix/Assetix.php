@@ -153,6 +153,19 @@ class Assetix implements iAssetix
 		return call_user_func_array(array($this, "_asset"), $args);
 	}
 
+	public function clear_cache()
+	{
+		$path = $this->_get_cache_path().'/*';
+		array_map("unlink", glob($path));
+	}
+
+	public function clear_production()
+	{
+		// output_absolute_path
+		$path = $this->_get_absolute_path().'/*';
+		array_map("unlink", glob($path));
+	}
+
 	// Redundant asset logic
 	protected function _asset()
 	{
@@ -247,6 +260,11 @@ class Assetix implements iAssetix
 	protected function _get_config()
 	{
 		return $this->_config;
+	}
+
+	protected function _get_cache_path()
+	{
+		return $this->_config['cache_path'];
 	}
 
 	// Returns the output_absolute_path config setting

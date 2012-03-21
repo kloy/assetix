@@ -5,3 +5,5 @@ composer.phar
 cache/*
 assets/production/*
 examples/document_viewer/*
+examples/cache/*
+examples/assets/production/*
