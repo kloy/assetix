@@ -41,7 +41,9 @@ class MyCssRewriteFilter implements FilterInterface
         $this->pattern = $pattern;
     }
 
-    public function filterLoad(AssetInterface $asset)
+    public function filterLoad(AssetInterface $asset){}
+
+    public function filterDump(AssetInterface $asset)
     {
         $replacement = $this->getReplacement();
         $pattern = $this->getPattern();
@@ -49,10 +51,6 @@ class MyCssRewriteFilter implements FilterInterface
         $content = preg_replace($pattern, $replacement, $content);
 
         $asset->setContent($content);
-    }
-
-    public function filterDump(AssetInterface $asset)
-    {
     }
 
     public function setReplacement($replacement)

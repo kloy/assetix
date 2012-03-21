@@ -78,14 +78,8 @@ class Compiler implements iCompiler
 		$assets = array('@'.$group);
 		$filters = array();
 		$filters[] = 'less';
-		if ($is_ie === true or $this->_is_debug() === true)
-		{
-			$filters[] = 'css_rewrite';
-		}
-		else
-		{
-			$filters[] = 'css_embed';
-		}
+		$is_ie === false and $filters[] = '?css_embed';
+		$filters[] = 'css_rewrite';
 
 		return $this->_render($assets, $filters);
 	}
@@ -98,14 +92,8 @@ class Compiler implements iCompiler
 		$assets = array('@'.$group);
 		$filters = array();
 		$filters[] = 'less';
-		if ($is_ie === true or $this->_is_debug() === true)
-		{
-			$filters[] = 'css_rewrite';
-		}
-		else
-		{
-			$filters[] = 'css_embed';
-		}
+		$is_ie === false and $filters[] = '?css_embed';
+		$filters[] = 'css_rewrite';
 
 		return $this->_render($assets, $filters);
 	}
@@ -118,14 +106,8 @@ class Compiler implements iCompiler
 		$assets = array('@'.$group);
 		$filters = array();
 		$filters[] = 'styl';
-		if ($is_ie === true or $this->_is_debug() === true)
-		{
-			$filters[] = 'css_rewrite';
-		}
-		else
-		{
-			$filters[] = 'css_embed';
-		}
+		$is_ie === false and $filters[] = '?css_embed';
+		$filters[] = 'css_rewrite';
 
 		return $this->_render($assets, $filters);
 	}
@@ -295,16 +277,16 @@ class Compiler implements iCompiler
 	protected function _setup_filters()
 	{
 		$config = $this->_get_config();
-		$this->_add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
+
+		// Stylesheet filters
 		$less = new LessFilter($config['node_path'], $config['node_paths']);
 		$styl = new StylusFilter($config['node_path'], $config['node_paths']);
+		// Enable compression
 		if ($this->_is_debug() === false)
 		{
 			$less->setCompress(true);
 			$styl->setCompress(true);
 		}
-		$this->_add_filter('css_rewrite', new MyCssRewriteFilter(
-			$config['css_rewrite_replacement'], $config['css_rewrite_pattern']));
 		$this->_add_filter('less', $less);
 		$this->_add_filter('styl', $styl);
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
@@ -315,11 +297,19 @@ class Compiler implements iCompiler
 		$css_embed->setMhtml(false);
 		$css_embed->setCharset('utf8');
 		$this->_add_filter('css_embed', $css_embed);
-		$this->_add_filter('underscore', new UnderscoreFilter(
-			$config['underscore_namespace']), $config['underscore_ext']);
+		$css_rewrite = new MyCssRewriteFilter($config['css_rewrite_replacement'],
+			$config['css_rewrite_pattern']);
+		$this->_add_filter('css_rewrite', $css_rewrite);
+
+		// Javascript filters
+		$this->_add_filter('yui_js', new Yui\JsCompressorFilter($config['yuicompressor_path']));
 		$this->_add_filter('coffee', new CoffeeScriptFilter(
 			$config['coffee_path'], $config['node_path']));
+
+		// Javascript template filters
 		$this->_add_filter('handlebars', new HandlebarsFilter(
 			$config['handlebars_path'], $config['node_path']));
+		$this->_add_filter('underscore', new UnderscoreFilter(
+			$config['underscore_namespace']), $config['underscore_ext']);
 	}
 }
