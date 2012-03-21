@@ -13,6 +13,8 @@
 
 namespace Assetix;
 
+use Assetix\Helpers;
+
 interface iCompiler
 {
 	public function css($group, $files, $is_ie);
@@ -179,6 +181,7 @@ class Compiler implements iCompiler
 
 		foreach($files as $file)
 		{
+			$file = Helpers::remove_prepending_forward_slash($file);
 			if (strpos($file, '*') === false)
 			{
 				$asset = new FileAsset($this->_get_asset_path().$file);
@@ -197,7 +200,7 @@ class Compiler implements iCompiler
 	protected function _to_cache(AssetCollection $collection)
 	{
 		$config = $this->_get_config();
-		$system_cache = new FilesystemCache($config['cache_path']);
+		$system_cache = new FilesystemCache($this->_get_cache_path());
 
 		$cached = new AssetCache($collection, $system_cache);
 
@@ -244,6 +247,12 @@ class Compiler implements iCompiler
 		call_user_func_array(array($this->_fm, "set"), $args);
 	}
 
+	protected function _get_cache_path()
+	{
+		$config = $this->_get_config();
+		return Helpers::include_trailing_forward_slash($config['cache_path']);
+	}
+
 	protected function _get_config()
 	{
 		return $this->_config;
@@ -251,12 +260,12 @@ class Compiler implements iCompiler
 
 	protected function _get_asset_path()
 	{
-		return $this->_config['asset_path'];
+		return Helpers::include_trailing_forward_slash($this->_config['asset_path']);
 	}
 
 	protected function _get_absolute_path()
 	{
-		return $this->_config['output_absolute_path'];
+		return Helpers::include_trailing_forward_slash($this->_config['output_absolute_path']);
 	}
 
 	protected function _is_debug()

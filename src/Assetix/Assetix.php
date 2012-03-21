@@ -12,6 +12,8 @@
 
 namespace Assetix;
 
+use Assetix\Helpers;
+
 interface iAssetix
 {
 	/**
@@ -56,25 +58,25 @@ class Assetix implements iAssetix
 	// Constructor. Takes and array of config settings.
 	public function __construct($config = array())
 	{
-		$assetix_path = dirname(__FILE__).'/../..';
+		$assetix_path = dirname(__FILE__).'/../../';
 		$config = array_merge(array(
 			// Debug mode turns off some filters such as yuicompressor.
 			// Set to false for production.
 			'debug' => true,
 			// Path to yuicompressor
-			'yuicompressor_path' => $assetix_path.'/bin/yuicompressor-2.4.7.jar',
+			'yuicompressor_path' => $assetix_path.'bin/yuicompressor-2.4.7.jar',
 			// Path to nodejs executable
 			'node_path' => '/usr/bin/node',
 			// Paths used in require by node
-			'node_paths' => array($assetix_path.'/node_modules'),
+			'node_paths' => array($assetix_path.'node_modules'),
 			// Path to coffeescript compiler
-			'coffee_path' => $assetix_path.'/node_modules/.bin/coffee',
+			'coffee_path' => $assetix_path.'node_modules/.bin/coffee',
 			// Path to handlebars compiler
-			'handlebars_path' => $assetix_path.'/node_modules/.bin/handlebars',
+			'handlebars_path' => $assetix_path.'node_modules/.bin/handlebars',
 			// Path to use for asset cache
-			'cache_path' => $assetix_path.'/cache',
+			'cache_path' => $assetix_path.'cache',
 			// Path to cssembed jar
-			'cssembed_path' => $assetix_path.'/bin/cssembed-0.4.5.jar',
+			'cssembed_path' => $assetix_path.'bin/cssembed-0.4.5.jar',
 			// root path to convert relative uri to. set to false to just let it be relative.
 			'cssembed_root' => false,
 			// Pattern to match when rewriting css
@@ -91,13 +93,13 @@ class Assetix implements iAssetix
 			// Extension for underscore files
 			'underscore_ext' => '.jst',
 			// Absolute path to output assets to
-			'output_absolute_path' => $assetix_path.'/assets/production',
+			'output_absolute_path' => $assetix_path.'assets/production',
 			// Web path used for serving links
-			'output_path' => '/assets/production',
+			'output_path' => '/assets/production/',
 			// Current assets version. Update to break production cache.
 			'assets_version' => '0.0.1',
 			// Path assets are located at
-			'asset_path' => $assetix_path.'/assets',
+			'asset_path' => $assetix_path.'assets',
 		), $config);
 
 		$this->_config = $config;
@@ -169,14 +171,14 @@ class Assetix implements iAssetix
 
 	public function clear_cache()
 	{
-		$path = $this->_get_cache_path().'/*';
+		$path = $this->_get_cache_path().'*';
 		array_map("unlink", glob($path));
 	}
 
 	public function clear_production()
 	{
 		// output_absolute_path
-		$path = $this->_get_absolute_path().'/*';
+		$path = $this->_get_absolute_path().'*';
 		array_map("unlink", glob($path));
 	}
 
@@ -272,7 +274,7 @@ class Assetix implements iAssetix
 				$version = $this->_get_version();
 			}
 
-			$asset_path = "/{$group}-{$version}.".$this->_determine_ext($type);
+			$asset_path = "{$group}-{$version}.".$this->_determine_ext($type);
 			$this->_write($this->_get_absolute_path().$asset_path, $contents);
 
 			return $this->_get_path().$asset_path;
@@ -287,19 +289,19 @@ class Assetix implements iAssetix
 
 	protected function _get_cache_path()
 	{
-		return $this->_config['cache_path'];
+		return Helpers::include_trailing_forward_slash($this->_config['cache_path']);
 	}
 
 	// Returns the output_absolute_path config setting
 	protected function _get_absolute_path()
 	{
-		return $this->_config['output_absolute_path'];
+		return Helpers::include_trailing_forward_slash($this->_config['output_absolute_path']);
 	}
 
 	// Returns the output_path config setting
 	protected function _get_path()
 	{
-		return $this->_config['output_path'];
+		return Helpers::include_trailing_forward_slash($this->_config['output_path']);
 	}
 
 	// Returns the version config setting
