@@ -1,6 +1,10 @@
 <?php
 
 return array(
+	// Pattern to match when rewriting css
+	'css_rewrite_pattern' => '../',
+	// Replacement to use when pattern is matched during css rewrite
+	'css_rewrite_replacement' => '/foo/',
 	// Path to use for asset cache
 	'cache_path' => __DIR__.'/../cache',
 	// Absolute path to output assets to

@@ -74,6 +74,10 @@ class Assetix implements iAssetix
 			'cssembed_path' => $assetix_path.'/bin/cssembed-0.4.5.jar',
 			// root path to convert relative uri to. set to false to just let it be relative.
 			'cssembed_root' => false,
+			// Pattern to match when rewriting css
+			'css_rewrite_pattern' => '../',
+			// Replacement to use when pattern is matched during css rewrite
+			'css_rewrite_replacement' => '/foo/',
 			// Javascript namespace to compile templates under
 			'underscore_namespace' => 'JST',
 			// Extension for underscore files

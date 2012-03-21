@@ -303,7 +303,8 @@ class Compiler implements iCompiler
 			$less->setCompress(true);
 			$styl->setCompress(true);
 		}
-		$this->_add_filter('css_rewrite', new MyCssRewriteFilter());
+		$this->_add_filter('css_rewrite', new MyCssRewriteFilter(
+			$config['css_rewrite_replacement'], $config['css_rewrite_pattern']));
 		$this->_add_filter('less', $less);
 		$this->_add_filter('styl', $styl);
 		$css_embed = new CssEmbedFilter($config['cssembed_path']);
